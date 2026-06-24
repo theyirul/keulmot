@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>클못 — 이름을 걸고 짓습니다</title>
+<meta name="description" content="대표가 직접 상담하고, 직접 시공합니다. 처음 연락부터 마무리까지, 같은 사람이 책임지는 1인 인테리어 클못.">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{
+    --bg:#ffffff;          /* 차가운 순백 */
+    --ink:#141414;         /* 중립 먹색에 가까운 검정 */
+    --ink-soft:#8a8a8a;    /* 캡션·보조 텍스트 (쿨그레이) */
+    --line:#e7e7e7;        /* 얇은 구분선 */
+    --photo:#eeeeee;       /* 사진 자리 플레이스홀더 (쿨그레이) */
+    --maxw:1180px;
+    --gap:clamp(48px,8vw,120px);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    letter-spacing:-.01em;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,48px)}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+
+  /* ── 상단 내비 ── */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:color-mix(in srgb,var(--bg) 88%,transparent);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{font-size:18px;font-weight:700;letter-spacing:.02em}
+  .menu{display:flex;gap:clamp(18px,3vw,36px);font-size:14px;color:var(--ink-soft)}
+  .menu a:hover{color:var(--ink)}
+  @media(max-width:640px){.menu{display:none}}
+
+  /* ── 히어로 ── */
+  .hero{padding:clamp(80px,16vh,160px) 0 clamp(56px,9vw,96px)}
+  .hero h1{
+    font-size:clamp(40px,8vw,76px);
+    font-weight:700;line-height:1.12;letter-spacing:-.03em;
+  }
+  .hero p{
+    margin-top:28px;max-width:30em;
+    font-size:clamp(16px,2.2vw,19px);color:var(--ink-soft);
+  }
+  .hero-photo{
+    margin-top:clamp(48px,7vw,80px);
+    aspect-ratio:16/8;background:var(--photo);
+    display:flex;align-items:center;justify-content:center;
+    color:#b6afa4;font-size:14px;letter-spacing:.04em;
+  }
+
+  /* ── 섹션 공통 ── */
+  section{padding:var(--gap) 0}
+  .eyebrow{font-size:13px;letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase;margin-bottom:18px}
+  .section-title{font-size:clamp(26px,4.5vw,40px);font-weight:700;line-height:1.25;letter-spacing:-.02em}
+  hr{border:0;border-top:1px solid var(--line)}
+
+  /* ── 브랜드 소개 ── */
+  .about{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,80px);align-items:start}
+  @media(max-width:760px){.about{grid-template-columns:1fr;gap:32px}}
+  .about .lead{font-size:clamp(22px,3.4vw,30px);font-weight:600;line-height:1.45;letter-spacing:-.02em}
+  .about .lead .han{color:var(--ink-soft);font-weight:500}
+  .about .body p{color:#3a3a3a;margin-bottom:1.1em}
+  .about .body p:last-child{margin-bottom:0}
+
+  /* ── 포트폴리오 ── */
+  .works{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(20px,3vw,40px)}
+  @media(max-width:640px){.works{grid-template-columns:1fr}}
+  .work-photo{aspect-ratio:4/3;background:var(--photo);display:flex;align-items:center;justify-content:center;color:#b6afa4;font-size:13px;letter-spacing:.04em;transition:opacity .2s}
+  .work:hover .work-photo{opacity:.85}
+  .work-meta{display:flex;justify-content:space-between;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+  .work-meta .name{font-weight:600;font-size:15px}
+  .work-meta .spec{font-size:13px;color:var(--ink-soft);text-align:right;white-space:nowrap}
+
+  /* ── 리뷰 ── */
+  .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,36px)}
+  @media(max-width:860px){.reviews{grid-template-columns:1fr}}
+  .review{border-top:2px solid var(--ink);padding-top:22px}
+  .review blockquote{font-size:16px;line-height:1.7;color:#2c2c2c}
+  .review cite{display:block;margin-top:16px;font-style:normal;font-size:13px;color:var(--ink-soft)}
+
+  /* ── 진행방식 ── */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  @media(max-width:760px){.steps{grid-template-columns:1fr 1fr}}
+  @media(max-width:440px){.steps{grid-template-columns:1fr}}
+  .step{padding:28px 24px 28px 0;border-top:1px solid var(--ink)}
+  .step .no{font-size:13px;color:var(--ink-soft);letter-spacing:.06em}
+  .step h3{margin:14px 0 12px;font-size:19px;font-weight:700}
+  .step p{font-size:14px;color:#4a4a4a;line-height:1.65}
+
+  /* ── 문의 ── */
+  .contact{text-align:center;padding:clamp(72px,12vw,140px) 0}
+  .contact h2{font-size:clamp(28px,5vw,46px);font-weight:700;line-height:1.25;letter-spacing:-.02em}
+  .contact p{margin-top:20px;color:var(--ink-soft);font-size:17px}
+  .btn{display:inline-block;margin-top:36px;background:var(--ink);color:var(--bg);
+    padding:16px 38px;border-radius:999px;font-size:15px;font-weight:600;transition:opacity .2s}
+  .btn:hover{opacity:.85}
+
+  footer{border-top:1px solid var(--line);padding:40px 0;font-size:13px;color:var(--ink-soft)}
+  .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">클못</div>
+    <nav class="menu">
+      <a href="#about">소개</a>
+      <a href="#works">작업</a>
+      <a href="#process">진행방식</a>
+      <a href="#contact">문의</a>
+    </nav>
+  </div>
+</header>
+
+<!-- 히어로 -->
+<div class="wrap">
+  <section class="hero">
+    <h1>이름을 걸고<br>짓습니다</h1>
+    <p>대표가 직접 상담하고, 직접 시공합니다.<br>처음 연락부터 마무리까지, 같은 사람이 책임집니다.</p>
+    <div class="hero-photo">대표 작업 사진 / 현장 컷</div>
+  </section>
+</div>
+
+<!-- 브랜드 소개 -->
+<div class="wrap">
+  <hr>
+  <section id="about" class="about">
+    <div>
+      <div class="eyebrow">브랜드 소개</div>
+      <p class="lead">큰 클(太), 연못 연(淵).<br><span class="han">클못은 대표 김태연의 한자 이름에서 왔습니다.</span></p>
+    </div>
+    <div class="body">
+      <p>독립할 때부터 이름을 걸고 일하고 싶었습니다. 이름을 건다는 건, 그만큼 책임진다는 뜻이니까요. 클못은 1인 업체입니다. 처음 연락하신 분이 끝까지 같은 사람을 만납니다.</p>
+      <p>상담도, 견적도, 시공도, 대표 김태연이 직접 합니다. 지금까지 모든 고객분을 지인 소개로 만났습니다. 저를 알리는 데는 서툴러도, 믿고 소개할 수 있는 인테리어 시공은 자신합니다.</p>
+    </div>
+  </section>
+</div>
+
+<!-- 포트폴리오 -->
+<div class="wrap">
+  <hr>
+  <section id="works">
+    <div class="eyebrow">포트폴리오</div>
+    <h2 class="section-title">인테리어 시공 사례</h2>
+    <p style="margin:16px 0 40px;color:var(--ink-soft);max-width:34em">직접 진행한 아파트 인테리어 사례입니다. 클릭하시면 더 많은 사진을 보실 수 있습니다.</p>
+    <div class="works">
+      <a class="work" href="#">
+        <div class="work-photo">프로젝트 사진</div>
+        <div class="work-meta"><span class="name">○○동 신혼집</span><span class="spec">서울 · 아파트 24평<br>2024</span></div>
+      </a>
+      <a class="work" href="#">
+        <div class="work-photo">프로젝트 사진</div>
+        <div class="work-meta"><span class="name">○○아파트 전체 리모델링</span><span class="spec">경기 · 아파트 32평<br>2024</span></div>
+      </a>
+      <a class="work" href="#">
+        <div class="work-photo">프로젝트 사진</div>
+        <div class="work-meta"><span class="name">○○동 주방·거실</span><span class="spec">서울 · 아파트 18평<br>2023</span></div>
+      </a>
+      <a class="work" href="#">
+        <div class="work-photo">프로젝트 사진</div>
+        <div class="work-meta"><span class="name">○○ 신축 입주</span><span class="spec">인천 · 아파트 39평<br>2023</span></div>
+      </a>
+    </div>
+  </section>
+</div>
+
+<!-- 리뷰 -->
+<div class="wrap">
+  <hr>
+  <section id="reviews">
+    <div class="eyebrow">리뷰</div>
+    <div class="reviews">
+      <div class="review">
+        <blockquote>“지인 소개로 연락했는데, 왜 소개를 받는지 바로 알겠더라고요. 처음부터 끝까지 같은 분이 직접 챙겨주시니까 중간에 말이 틀어지는 게 전혀 없었어요. 결과물도 너무 만족스럽고, 저도 주변에 소개하고 싶어졌어요.”</blockquote>
+        <cite>— 고객 후기</cite>
+      </div>
+      <div class="review">
+        <blockquote>“견적 단계에서부터 꼼꼼하게 설명해 주셔서 믿음이 갔어요. 시공 중에도 중간중간 사진 보내주시고, 마무리까지 깔끔하게 해주셔서 정말 만족했습니다. 대형 업체보다 훨씬 낫다고 느꼈어요.”</blockquote>
+        <cite>— 고객 후기</cite>
+      </div>
+      <div class="review">
+        <blockquote>“신혼집 준비라 걱정이 많았는데, 꼼꼼하게 봐주시고 예산에 맞게 최선의 방향을 제안해 주셨어요. 덕분에 원하던 분위기 그대로 잘 완성됐습니다. 감사해요.”</blockquote>
+        <cite>— 고객 후기</cite>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- 진행방식 -->
+<div class="wrap">
+  <hr>
+  <section id="process">
+    <div class="eyebrow">진행방식</div>
+    <h2 class="section-title" style="margin-bottom:48px">클못은 이렇게 진행합니다</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="no">01</div>
+        <h3>카카오톡 문의</h3>
+        <p>공간 정보와 원하시는 내용을 편하게 보내주세요. 부담 없이 연락 주셔도 됩니다.</p>
+      </div>
+      <div class="step">
+        <div class="no">02</div>
+        <h3>현장 방문 상담</h3>
+        <p>대표가 직접 방문해 공간을 확인하고 상담드립니다. 참고 이미지가 있으면 함께 보여주세요.</p>
+      </div>
+      <div class="step">
+        <div class="no">03</div>
+        <h3>견적서 제공</h3>
+        <p>항목별로 투명하게 정리된 견적서를 드립니다. 궁금한 부분은 언제든 질문해 주세요.</p>
+      </div>
+      <div class="step">
+        <div class="no">04</div>
+        <h3>시공 &amp; 마무리</h3>
+        <p>대표가 처음부터 끝까지 직접 진행합니다. 시공 중 사진도 공유해 드립니다.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- 문의 -->
+<div class="wrap">
+  <section id="contact" class="contact">
+    <h2>지인 소개도,<br>직접 연락도 환영합니다</h2>
+    <p>궁금한 점이 있으시면 편하게 연락주세요. 대표가 직접 답변드립니다.</p>
+    <a class="btn" href="#">카카오톡으로 문의하기</a>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap foot">
+    <span>클못 — 대표 김태연</span>
+    <span>문의 · 카카오톡 채널</span>
+  </div>
+</footer>
+
+</body>
+</html>
