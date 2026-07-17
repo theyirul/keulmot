@@ -29,43 +29,56 @@
   .nav{display:flex;align-items:center;justify-content:space-between;height:52px}
   .logo{font-size:15px;font-weight:700;letter-spacing:.04em}
   .logo small{font-weight:400;letter-spacing:.12em;margin-left:8px;color:#000}
-  .nav-right{font-size:13px;letter-spacing:.02em}
+  .menu{display:flex;gap:24px;font-size:13px}
 
   /* 스테이트먼트 */
-  .statement{padding:clamp(72px,14vh,150px) 0 clamp(60px,10vw,120px);max-width:540px}
-  .statement h1{font-size:clamp(20px,2.6vw,26px);font-weight:700;line-height:1.4;letter-spacing:-.01em;margin-bottom:32px}
+  .statement{padding:clamp(56px,10vh,96px) 0 clamp(44px,7vw,72px);max-width:540px}
+  .statement h1{font-size:clamp(20px,2.6vw,26px);font-weight:700;line-height:1.4;letter-spacing:-.01em;margin-bottom:28px}
   .statement p{font-size:14px;line-height:1.8;margin-bottom:1.4em;color:#000}
-  .statement .en{color:#000;margin-bottom:2.2em}
   .statement .cta{display:inline-block;margin-top:14px;font-size:14px;font-weight:700;border-bottom:1px solid #000;padding-bottom:2px}
 
   /* 섹션 헤딩 */
-  .label{font-size:13px;font-weight:700;letter-spacing:.04em;padding-bottom:14px;border-bottom:1px solid #000;margin-bottom:40px}
+  .label{font-size:15px;font-weight:700;letter-spacing:.02em;padding-bottom:14px;border-bottom:1px solid #000;margin-bottom:0}
 
-  /* 시공 사례 — 인덱스 */
-  .index{margin-bottom:clamp(64px,9vw,110px)}
-  .index ul{list-style:none}
-  .index li{border-bottom:1px solid #ddd}
-  .index a{display:flex;justify-content:space-between;gap:20px;padding:13px 2px;font-size:14px}
-  .index .yr{color:#888;white-space:nowrap}
+  /* 포트폴리오 — 아코디언 (목록이 곧 메뉴, 클릭 시 해당 사례만 펼침) */
+  .acc-list{margin-bottom:clamp(44px,6vw,72px)}
+  .acc{border-bottom:1px solid #ddd;scroll-margin-top:60px}
+  .acc-head{
+    display:flex;align-items:baseline;gap:16px;
+    padding:16px 2px;font-size:14px;cursor:pointer;list-style:none;
+  }
+  .acc-head::-webkit-details-marker{display:none}
+  .acc-name{font-weight:700}
+  .acc-sub{color:#999;font-size:13px}
+  .acc-yr{color:#888;margin-left:auto;white-space:nowrap;font-size:13px}
+  .acc-mark{position:relative;width:11px;height:11px;flex:none;align-self:center}
+  .acc-mark::before,.acc-mark::after{
+    content:"";position:absolute;background:#000;transition:opacity .2s,transform .2s;
+  }
+  .acc-mark::before{left:0;top:5px;width:11px;height:1px}          /* 가로 막대 */
+  .acc-mark::after{left:5px;top:0;width:1px;height:11px}           /* 세로 막대 (열리면 사라져 − 가 됨) */
+  .acc[open] .acc-mark::after{opacity:0}
+  .acc[open] .acc-name{color:#000}
+  .acc:hover .acc-head{opacity:.55}
 
-  /* 프로젝트 상세 — 김거실식 좌측 메타 + 우측 사진 그리드 */
-  .project{display:grid;grid-template-columns:200px 1fr;gap:clamp(28px,5vw,72px);margin-bottom:clamp(72px,10vw,130px);scroll-margin-top:72px}
-  @media(max-width:720px){.project{grid-template-columns:1fr;gap:24px}}
-  .meta{font-size:13px;line-height:1.75}
-  .meta .pname{font-weight:700;font-size:15px;margin-bottom:18px}
-  .meta dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
+  .acc-body{
+    display:grid;grid-template-columns:200px 1fr;gap:clamp(28px,5vw,72px);
+    padding:8px 0 clamp(48px,7vw,80px);
+  }
+  @media(max-width:720px){.acc-body{grid-template-columns:1fr;gap:24px}}
+  .meta{font-size:13px;line-height:1.75;align-self:start;position:sticky;top:72px}
+  @media(max-width:720px){.meta{position:static}}
+  .meta dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px}
   .meta dt{color:#999}
   .meta dd{color:#000}
-  .grid{column-count:3;column-gap:clamp(8px,1.2vw,16px)}
-  @media(max-width:720px){.grid{column-count:2}}
-  .ph{width:100%;margin-bottom:clamp(8px,1.2vw,16px);break-inside:avoid;background:var(--photo) center/cover no-repeat;aspect-ratio:3/4}
-  .ph.tall{aspect-ratio:3/5}
-  .ph.wide{aspect-ratio:3/2}
-  .ph.sq{aspect-ratio:1/1}
+  .meta .pnote{margin-top:16px;color:#555;font-size:12.5px;line-height:1.7}
+  .grid{column-count:2;column-gap:clamp(8px,1.2vw,14px)}
+  @media(max-width:480px){.grid{column-count:1}}
+  .ph{width:100%;margin-bottom:clamp(8px,1.2vw,14px);break-inside:avoid;background:var(--photo)}
 
   /* 문의 */
-  .contact{padding:clamp(72px,11vw,130px) 0 clamp(80px,12vw,150px);border-top:1px solid #000}
-  .contact h2{font-size:13px;font-weight:700;letter-spacing:.04em;margin-bottom:32px}
+  .contact{padding:clamp(44px,6vw,72px) 0 clamp(52px,7vw,84px);border-top:1px solid #000}
+  .contact h2{font-size:15px;font-weight:700;letter-spacing:.02em;margin-bottom:24px}
   .contact .big{font-size:clamp(18px,2.4vw,24px);font-weight:700;line-height:1.45;max-width:18em;margin-bottom:36px}
   .contact dl{display:grid;grid-template-columns:auto 1fr;gap:8px 28px;font-size:14px;max-width:420px}
   .contact dt{color:#999}
@@ -78,8 +91,8 @@
 <header>
   <div class="wrap nav">
     <div class="logo">클못<small>KEULMOT</small></div>
-    <nav class="menu" style="display:flex;gap:24px;font-size:13px">
-      <a href="#works">작업</a>
+    <nav class="menu">
+      <a href="#works">포트폴리오</a>
       <a href="contact.html">상담 신청</a>
     </nav>
   </div>
@@ -89,114 +102,191 @@
 
   <!-- 스테이트먼트 -->
   <section class="statement">
-    <h1>이름을 걸고 짓습니다.</h1>
-    <p class="en">KEULMOT is a one-person interior studio. From the first message to the final touch, the same person stays responsible.</p>
-    <p>큰 클(太), 연못 연(淵). 클못은 대표 김태연의 한자 이름에서 왔습니다. 이름을 건다는 건, 그만큼 책임진다는 뜻입니다.</p>
-    <p>상담도, 견적도, 시공도 대표가 직접 합니다. 처음 연락하신 분이 끝까지 같은 사람을 만납니다.</p>
-    <a class="cta" href="contact.html">상담 신청 →</a>
+    <h1>보여주기 위한 인테리어가 아닌<br>살아가기 위한 인테리어</h1>
+    <p>많은 이야기를 담아낼 연못, ‘클못’은 대표 김태연의 이름에서 비롯되었습니다. 이름을 건다는 건, 공간 하나하나에 책임을 다하겠다는 약속입니다.</p>
+    <p>클못은 상담과 견적, 시공까지 모든 과정을 대표가 직접 함께합니다. 처음 대화부터 공간이 완성되는 순간까지, 하나의 기준과 하나의 책임으로 프로젝트를 이어갑니다.</p>
+    <p>오래 머물고 싶은 공간, 시간이 지나도 가치가 이어지는 공간을 고민합니다. 기능과 아름다움이 자연스럽게 어우러지는 디자인으로, 오래도록 만족할 수 있는 공간 경험을 만들어 가겠습니다.</p>
+    <a class="cta" href="contact.html">상담 신청</a>
   </section>
 
   <!-- 시공 사례 -->
   <section id="works">
-    <div class="label">시공 사례 — Selected Works</div>
+    <div class="label">포트폴리오</div>
 
-    <div class="index">
-      <ul>
-        <li><a href="#p1"><span>○○동 신혼집 &nbsp;<i style="font-style:normal;color:#999">서울 · 아파트 24평</i></span><span class="yr">2024</span></a></li>
-        <li><a href="#p2"><span>○○아파트 전체 리모델링 &nbsp;<i style="font-style:normal;color:#999">경기 · 아파트 32평</i></span><span class="yr">2024</span></a></li>
-        <li><a href="#p3"><span>○○동 주방·거실 &nbsp;<i style="font-style:normal;color:#999">서울 · 아파트 18평</i></span><span class="yr">2023</span></a></li>
-        <li><a href="#p4"><span>○○ 신축 입주 &nbsp;<i style="font-style:normal;color:#999">인천 · 아파트 39평</i></span><span class="yr">2023</span></a></li>
-      </ul>
-    </div>
-
-    <!-- 프로젝트 1 -->
-    <div class="project" id="p1">
-      <div class="meta">
-        <div class="pname">○○동 신혼집</div>
-        <dl>
-          <dt>위치</dt><dd>서울</dd>
-          <dt>유형</dt><dd>아파트</dd>
-          <dt>면적</dt><dd>24평</dd>
-          <dt>완공</dt><dd>2024</dd>
-          <dt>시공</dt><dd>설계 · 시공</dd>
-        </dl>
-      </div>
-      <div class="grid">
-        <div class="ph wide"></div>
-        <div class="ph"></div>
-        <div class="ph tall"></div>
-        <div class="ph sq"></div>
-        <div class="ph"></div>
-      </div>
-    </div>
-
-    <!-- 프로젝트 2 -->
-    <div class="project" id="p2">
-      <div class="meta">
-        <div class="pname">○○아파트 전체 리모델링</div>
-        <dl>
-          <dt>위치</dt><dd>경기</dd>
-          <dt>유형</dt><dd>아파트</dd>
-          <dt>면적</dt><dd>32평</dd>
-          <dt>완공</dt><dd>2024</dd>
-          <dt>시공</dt><dd>설계 · 시공</dd>
-        </dl>
-      </div>
-      <div class="grid">
-        <div class="ph"></div>
-        <div class="ph tall"></div>
-        <div class="ph wide"></div>
-        <div class="ph sq"></div>
-        <div class="ph"></div>
-      </div>
-    </div>
-
-    <!-- 프로젝트 3 -->
-    <div class="project" id="p3">
-      <div class="meta">
-        <div class="pname">○○동 주방·거실</div>
-        <dl>
-          <dt>위치</dt><dd>서울</dd>
-          <dt>유형</dt><dd>아파트</dd>
-          <dt>면적</dt><dd>18평</dd>
-          <dt>완공</dt><dd>2023</dd>
-          <dt>시공</dt><dd>설계 · 시공</dd>
-        </dl>
-      </div>
-      <div class="grid">
-        <div class="ph tall"></div>
-        <div class="ph"></div>
-        <div class="ph sq"></div>
-        <div class="ph wide"></div>
-        <div class="ph"></div>
-      </div>
-    </div>
-
-    <!-- 프로젝트 4 -->
-    <div class="project" id="p4">
-      <div class="meta">
-        <div class="pname">○○ 신축 입주</div>
-        <dl>
-          <dt>위치</dt><dd>인천</dd>
-          <dt>유형</dt><dd>아파트</dd>
-          <dt>면적</dt><dd>39평</dd>
-          <dt>완공</dt><dd>2023</dd>
-          <dt>시공</dt><dd>설계 · 시공</dd>
-        </dl>
-      </div>
-      <div class="grid">
-        <div class="ph wide"></div>
-        <div class="ph sq"></div>
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <div class="ph tall"></div>
-      </div>
+    <div class="acc-list">
+      <details class="acc" name="works" id="geumho">
+        <summary class="acc-head">
+          <span class="acc-name">금호래미안하이리버</span>
+          <span class="acc-sub">서울 성동구 · 아파트 33평</span>
+          <span class="acc-yr">2025</span>
+          <span class="acc-mark" aria-hidden="true"></span>
+        </summary>
+        <div class="acc-body">
+          <div class="meta">
+            <dl>
+            <dt>위치</dt><dd>서울 성동구</dd>
+            <dt>면적</dt><dd>아파트 33평</dd>
+            <dt>준공</dt><dd>2012년</dd>
+            <dt>시공 시기</dt><dd>2025.10 – 11</dd>
+            <dt>기간</dt><dd>6주 미만</dd>
+            <dt>범위</dt><dd>창호 부분교체 · 확장 · 시스템 에어컨 포함 전체 수리</dd>
+            </dl>
+          </div>
+          <div class="grid">
+          <img class="ph" loading="lazy" src="assets/geumho/01.jpg" alt="금호래미안하이리버 시공 사진">
+          <img class="ph" loading="lazy" src="assets/geumho/02.jpg" alt="금호래미안하이리버 시공 사진">
+          <img class="ph" loading="lazy" src="assets/geumho/03.jpg" alt="금호래미안하이리버 시공 사진">
+          <img class="ph" loading="lazy" src="assets/geumho/04.jpg" alt="금호래미안하이리버 시공 사진">
+          <img class="ph" loading="lazy" src="assets/geumho/05.jpg" alt="금호래미안하이리버 시공 사진">
+          <img class="ph" loading="lazy" src="assets/geumho/06.jpg" alt="금호래미안하이리버 시공 사진">
+          <img class="ph" loading="lazy" src="assets/geumho/07.jpg" alt="금호래미안하이리버 시공 사진">
+          <img class="ph" loading="lazy" src="assets/geumho/08.jpg" alt="금호래미안하이리버 시공 사진">
+          <img class="ph" loading="lazy" src="assets/geumho/09.jpg" alt="금호래미안하이리버 시공 사진">
+          <img class="ph" loading="lazy" src="assets/geumho/10.jpg" alt="금호래미안하이리버 시공 사진">
+          <img class="ph" loading="lazy" src="assets/geumho/11.jpg" alt="금호래미안하이리버 시공 사진">
+          <img class="ph" loading="lazy" src="assets/geumho/12.jpg" alt="금호래미안하이리버 시공 사진">
+          </div>
+        </div>
+      </details>
+      <details class="acc" name="works" id="dmc">
+        <summary class="acc-head">
+          <span class="acc-name">DMC래미안e편한세상</span>
+          <span class="acc-sub">서울 서대문구 · 아파트 33평</span>
+          <span class="acc-yr">2025</span>
+          <span class="acc-mark" aria-hidden="true"></span>
+        </summary>
+        <div class="acc-body">
+          <div class="meta">
+            <dl>
+            <dt>위치</dt><dd>서울 서대문구</dd>
+            <dt>면적</dt><dd>아파트 33평</dd>
+            <dt>준공</dt><dd>2012년</dd>
+            <dt>시공 시기</dt><dd>2025.09 – 10</dd>
+            <dt>기간</dt><dd>5주</dd>
+            <dt>범위</dt><dd>전창 교체 · 확장 · 시스템 에어컨 포함 전체 수리</dd>
+            </dl>
+          </div>
+          <div class="grid">
+          <img class="ph" loading="lazy" src="assets/dmc/01.jpg" alt="DMC래미안e편한세상 시공 사진">
+          <img class="ph" loading="lazy" src="assets/dmc/02.jpg" alt="DMC래미안e편한세상 시공 사진">
+          <img class="ph" loading="lazy" src="assets/dmc/03.jpg" alt="DMC래미안e편한세상 시공 사진">
+          <img class="ph" loading="lazy" src="assets/dmc/04.jpg" alt="DMC래미안e편한세상 시공 사진">
+          <img class="ph" loading="lazy" src="assets/dmc/05.jpg" alt="DMC래미안e편한세상 시공 사진">
+          <img class="ph" loading="lazy" src="assets/dmc/06.jpg" alt="DMC래미안e편한세상 시공 사진">
+          <img class="ph" loading="lazy" src="assets/dmc/07.jpg" alt="DMC래미안e편한세상 시공 사진">
+          <img class="ph" loading="lazy" src="assets/dmc/08.jpg" alt="DMC래미안e편한세상 시공 사진">
+          <img class="ph" loading="lazy" src="assets/dmc/09.jpg" alt="DMC래미안e편한세상 시공 사진">
+          </div>
+        </div>
+      </details>
+      <details class="acc" name="works" id="magok">
+        <summary class="acc-head">
+          <span class="acc-name">마곡 힐스테이트</span>
+          <span class="acc-sub">서울 강서구 · 아파트 34평</span>
+          <span class="acc-yr">2025</span>
+          <span class="acc-mark" aria-hidden="true"></span>
+        </summary>
+        <div class="acc-body">
+          <div class="meta">
+            <dl>
+            <dt>위치</dt><dd>서울 강서구</dd>
+            <dt>면적</dt><dd>아파트 34평</dd>
+            <dt>준공</dt><dd>2017년</dd>
+            <dt>시공 시기</dt><dd>2025.06 – 07</dd>
+            <dt>기간</dt><dd>7주 미만</dd>
+            <dt>범위</dt><dd>시스템 에어컨 포함 전체 수리</dd>
+            </dl>
+          <p class="pnote">공용부 무문선 · 무몰딩, 벽체 래핑</p>
+          </div>
+          <div class="grid">
+          <img class="ph" loading="lazy" src="assets/magok/01.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/02.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/03.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/04.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/05.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/06.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/07.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/08.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/09.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/10.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/11.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/12.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/13.jpg" alt="마곡 힐스테이트 시공 사진">
+          <img class="ph" loading="lazy" src="assets/magok/14.jpg" alt="마곡 힐스테이트 시공 사진">
+          </div>
+        </div>
+      </details>
+      <details class="acc" name="works" id="manhyeon">
+        <summary class="acc-head">
+          <span class="acc-name">만현마을5단지 아이파크</span>
+          <span class="acc-sub">용인 수지 · 아파트 37평</span>
+          <span class="acc-yr">2025</span>
+          <span class="acc-mark" aria-hidden="true"></span>
+        </summary>
+        <div class="acc-body">
+          <div class="meta">
+            <dl>
+            <dt>위치</dt><dd>용인 수지</dd>
+            <dt>면적</dt><dd>아파트 37평</dd>
+            <dt>준공</dt><dd>2002년</dd>
+            <dt>시공 시기</dt><dd>2025.04 – 05</dd>
+            <dt>기간</dt><dd>6주</dd>
+            <dt>범위</dt><dd>전창 교체 · 시스템 에어컨 포함 전체 수리</dd>
+            </dl>
+          </div>
+          <div class="grid">
+          <img class="ph" loading="lazy" src="assets/manhyeon/01.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          <img class="ph" loading="lazy" src="assets/manhyeon/02.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          <img class="ph" loading="lazy" src="assets/manhyeon/03.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          <img class="ph" loading="lazy" src="assets/manhyeon/04.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          <img class="ph" loading="lazy" src="assets/manhyeon/05.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          <img class="ph" loading="lazy" src="assets/manhyeon/06.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          <img class="ph" loading="lazy" src="assets/manhyeon/07.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          <img class="ph" loading="lazy" src="assets/manhyeon/08.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          <img class="ph" loading="lazy" src="assets/manhyeon/09.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          <img class="ph" loading="lazy" src="assets/manhyeon/10.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          <img class="ph" loading="lazy" src="assets/manhyeon/11.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          <img class="ph" loading="lazy" src="assets/manhyeon/12.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          <img class="ph" loading="lazy" src="assets/manhyeon/13.jpg" alt="만현마을5단지 아이파크 시공 사진">
+          </div>
+        </div>
+      </details>
+      <details class="acc" name="works" id="yeomchang">
+        <summary class="acc-head">
+          <span class="acc-name">염창월드메르디앙</span>
+          <span class="acc-sub">서울 강서구 · 아파트 32평</span>
+          <span class="acc-yr">2025</span>
+          <span class="acc-mark" aria-hidden="true"></span>
+        </summary>
+        <div class="acc-body">
+          <div class="meta">
+            <dl>
+            <dt>위치</dt><dd>서울 강서구</dd>
+            <dt>면적</dt><dd>아파트 32평</dd>
+            <dt>준공</dt><dd>2004년</dd>
+            <dt>시공 시기</dt><dd>2025</dd>
+            <dt>기간</dt><dd>5주</dd>
+            <dt>범위</dt><dd>전창 교체 · 확장 · 시스템 에어컨 포함 전체 수리</dd>
+            </dl>
+          <p class="pnote">좁고 긴 구축 주방에 대면형 아일랜드</p>
+          </div>
+          <div class="grid">
+          <img class="ph" loading="lazy" src="assets/yeomchang/01.jpg" alt="염창월드메르디앙 시공 사진">
+          <img class="ph" loading="lazy" src="assets/yeomchang/02.jpg" alt="염창월드메르디앙 시공 사진">
+          <img class="ph" loading="lazy" src="assets/yeomchang/03.jpg" alt="염창월드메르디앙 시공 사진">
+          <img class="ph" loading="lazy" src="assets/yeomchang/04.jpg" alt="염창월드메르디앙 시공 사진">
+          <img class="ph" loading="lazy" src="assets/yeomchang/05.jpg" alt="염창월드메르디앙 시공 사진">
+          <img class="ph" loading="lazy" src="assets/yeomchang/06.jpg" alt="염창월드메르디앙 시공 사진">
+          <img class="ph" loading="lazy" src="assets/yeomchang/07.jpg" alt="염창월드메르디앙 시공 사진">
+          </div>
+        </div>
+      </details>
     </div>
   </section>
 
   <!-- 문의 -->
   <section id="contact" class="contact">
-    <h2>문의하기 — Inquiries</h2>
+    <h2>문의하기</h2>
     <dl>
       <dt>카카오톡</dt><dd>채널 연결 예정</dd>
       <dt>이메일</dt><dd>연락처 입력 예정</dd>
@@ -213,10 +303,17 @@
   </footer>
 </div>
 
-<!-- 임시 사진: 실제 인테리어 사진이 들어오면 각 .ph에 background-image로 교체 -->
 <script>
-  document.querySelectorAll('.ph').forEach(function(el,i){
-    el.style.backgroundImage="url(https://loremflickr.com/g/700/900/interior,apartment?random="+i+")";
+  // 단일 오픈 아코디언: 하나를 열면 나머지는 닫는다 (name 속성 미지원 브라우저 대비).
+  // 열 때 헤더가 화면 위로 벗어나 있으면 부드럽게 스크롤해 맞춘다.
+  var accs = document.querySelectorAll('details.acc');
+  accs.forEach(function(d){
+    d.addEventListener('toggle', function(){
+      if(!d.open) return;
+      accs.forEach(function(o){ if(o!==d) o.open = false; });
+      var top = d.getBoundingClientRect().top;
+      if(top < 52) d.scrollIntoView({behavior:'smooth', block:'start'});
+    });
   });
 </script>
 
