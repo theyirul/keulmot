@@ -8,3 +8,10 @@ materials-request.md
 build.py
 scratch-csv/
 .DS_Store
+
+# 로컬 미리보기 도구 — 공개 안 함
+preview.py
+미리보기.command
+
+# 내부 공유 문서 — 공개 안 함
+소장님-공유-포트폴리오-코멘트.md

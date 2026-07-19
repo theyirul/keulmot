@@ -27,30 +27,32 @@
   /* 헤더 */
   header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #000}
   .nav{display:flex;align-items:center;justify-content:space-between;height:52px}
-  .logo{font-size:15px;font-weight:700;letter-spacing:.04em}
+  .logo{font-size:16px;font-weight:700;letter-spacing:.04em}
   .logo small{font-weight:400;letter-spacing:.12em;margin-left:8px;color:#000}
-  .menu{display:flex;gap:24px;font-size:13px}
+  .menu{display:flex;gap:24px;font-size:14px}
 
   /* 스테이트먼트 */
-  .statement{padding:clamp(56px,10vh,96px) 0 clamp(44px,7vw,72px);max-width:540px}
-  .statement h1{font-size:clamp(20px,2.6vw,26px);font-weight:700;line-height:1.4;letter-spacing:-.01em;margin-bottom:28px}
-  .statement p{font-size:14px;line-height:1.8;margin-bottom:1.4em;color:#000}
-  .statement .cta{display:inline-block;margin-top:14px;font-size:14px;font-weight:700;border-bottom:1px solid #000;padding-bottom:2px}
+  .statement{padding:clamp(96px,20vh,190px) 0 clamp(64px,9vw,110px);max-width:540px}
+  .statement h1{font-size:clamp(22px,2.6vw,26px);font-weight:700;line-height:1.45;letter-spacing:-.01em;margin-bottom:36px}
+  .statement p{font-size:14px;line-height:1.85;margin-bottom:1.5em;color:#000}
+  .statement .cta{display:inline-block;margin-top:32px;font-size:14px;font-weight:700;letter-spacing:.02em;border:1px solid #000;padding:13px 32px;transition:background .2s,color .2s}
+  .statement .cta:hover{background:#000;color:#fff;opacity:1}
 
   /* 섹션 헤딩 */
-  .label{font-size:15px;font-weight:700;letter-spacing:.02em;padding-bottom:14px;border-bottom:1px solid #000;margin-bottom:0}
+  .label{font-size:16px;font-weight:700;letter-spacing:.02em;padding-bottom:14px;border-bottom:1px solid #000;margin-bottom:0}
 
   /* 포트폴리오 — 아코디언 (목록이 곧 메뉴, 클릭 시 해당 사례만 펼침) */
   .acc-list{margin-bottom:clamp(44px,6vw,72px)}
   .acc{border-bottom:1px solid #ddd;scroll-margin-top:60px}
+  .acc:last-child{border-bottom:0}
   .acc-head{
     display:flex;align-items:baseline;gap:16px;
     padding:16px 2px;font-size:14px;cursor:pointer;list-style:none;
   }
   .acc-head::-webkit-details-marker{display:none}
   .acc-name{font-weight:700}
-  .acc-sub{color:#999;font-size:13px}
-  .acc-yr{color:#888;margin-left:auto;white-space:nowrap;font-size:13px}
+  .acc-sub{color:#999;font-size:14px}
+  .acc-yr{color:#888;margin-left:auto;white-space:nowrap;font-size:14px}
   .acc-mark{position:relative;width:11px;height:11px;flex:none;align-self:center}
   .acc-mark::before,.acc-mark::after{
     content:"";position:absolute;background:#000;transition:opacity .2s,transform .2s;
@@ -66,24 +68,20 @@
     padding:8px 0 clamp(48px,7vw,80px);
   }
   @media(max-width:720px){.acc-body{grid-template-columns:1fr;gap:24px}}
-  .meta{font-size:13px;line-height:1.75;align-self:start;position:sticky;top:72px}
+  .meta{font-size:14px;line-height:1.75;align-self:start;position:sticky;top:72px}
   @media(max-width:720px){.meta{position:static}}
   .meta dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px}
   .meta dt{color:#999}
   .meta dd{color:#000}
-  .meta .pnote{margin-top:16px;color:#555;font-size:12.5px;line-height:1.7}
+  /* 사례를 여는 한 줄 — 메타·사진 위 전체폭 리드 문장 */
+  .acc-comment{grid-column:1/-1;font-size:14px;line-height:1.75;color:#000;max-width:34em;margin:0}
+  .acc-draft{display:inline-block;margin-left:8px;vertical-align:2px;font-size:12px;font-weight:700;letter-spacing:.06em;color:#999;border:1px solid #ccc;border-radius:2px;padding:1px 5px}
   .grid{column-count:2;column-gap:clamp(8px,1.2vw,14px)}
   @media(max-width:480px){.grid{column-count:1}}
   .ph{width:100%;margin-bottom:clamp(8px,1.2vw,14px);break-inside:avoid;background:var(--photo)}
 
-  /* 문의 */
-  .contact{padding:clamp(44px,6vw,72px) 0 clamp(52px,7vw,84px);border-top:1px solid #000}
-  .contact h2{font-size:15px;font-weight:700;letter-spacing:.02em;margin-bottom:24px}
-  .contact .big{font-size:clamp(18px,2.4vw,24px);font-weight:700;line-height:1.45;max-width:18em;margin-bottom:36px}
-  .contact dl{display:grid;grid-template-columns:auto 1fr;gap:8px 28px;font-size:14px;max-width:420px}
-  .contact dt{color:#999}
-
-  footer{border-top:1px solid #ddd;padding:28px 0;font-size:12px;color:#999;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  footer{border-top:1px solid #000;margin-top:clamp(20px,4vw,40px);padding:28px 0;font-size:12px;color:#999;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  footer .kakao{color:#000;font-weight:700}
 </style>
 </head>
 <body>
@@ -103,9 +101,8 @@
   <!-- 스테이트먼트 -->
   <section class="statement">
     <h1>보여주기 위한 인테리어가 아닌<br>살아가기 위한 인테리어</h1>
-    <p>많은 이야기를 담아낼 연못, ‘클못’은 대표 김태연의 이름에서 비롯되었습니다. 이름을 건다는 건, 공간 하나하나에 책임을 다하겠다는 약속입니다.</p>
-    <p>클못은 상담과 견적, 시공까지 모든 과정을 대표가 직접 함께합니다. 처음 대화부터 공간이 완성되는 순간까지, 하나의 기준과 하나의 책임으로 프로젝트를 이어갑니다.</p>
-    <p>오래 머물고 싶은 공간, 시간이 지나도 가치가 이어지는 공간을 고민합니다. 기능과 아름다움이 자연스럽게 어우러지는 디자인으로, 오래도록 만족할 수 있는 공간 경험을 만들어 가겠습니다.</p>
+    <p>15년 차 주거 공간 디자이너 김태연의 1인 인테리어 스튜디오, 클못입니다. 집은 누군가 매일 살아가는 공간. 오래 머물고 싶고, 시간이 지나도 가치가 이어지도록 고객과 함께 고민합니다.</p>
+    <p>클못은 상담과 견적, 시공까지 모든 과정을 대표가 직접 함께합니다. 처음 대화부터 공간이 완성되는 순간까지, 하나의 기준과 하나의 책임으로 프로젝트를 이어나가겠습니다.</p>
     <a class="cta" href="contact.html">상담 신청</a>
   </section>
 
@@ -122,6 +119,7 @@
           <span class="acc-mark" aria-hidden="true"></span>
         </summary>
         <div class="acc-body">
+          <p class="acc-comment">구축의 뼈대는 살리고, 창호 교체와 확장으로 채광과 동선을 바로잡았습니다.<span class="acc-draft">초안</span></p>
           <div class="meta">
             <dl>
             <dt>위치</dt><dd>서울 성동구</dd>
@@ -156,6 +154,7 @@
           <span class="acc-mark" aria-hidden="true"></span>
         </summary>
         <div class="acc-body">
+          <p class="acc-comment">전창을 새로 들이고 거실을 확장해, 집 안 깊이 빛이 들도록 했습니다.<span class="acc-draft">초안</span></p>
           <div class="meta">
             <dl>
             <dt>위치</dt><dd>서울 서대문구</dd>
@@ -187,6 +186,7 @@
           <span class="acc-mark" aria-hidden="true"></span>
         </summary>
         <div class="acc-body">
+          <p class="acc-comment">공용부는 무문선·무몰딩으로 정리하고, 벽체는 래핑으로 마감했습니다.</p>
           <div class="meta">
             <dl>
             <dt>위치</dt><dd>서울 강서구</dd>
@@ -196,7 +196,6 @@
             <dt>기간</dt><dd>7주 미만</dd>
             <dt>범위</dt><dd>시스템 에어컨 포함 전체 수리</dd>
             </dl>
-          <p class="pnote">공용부 무문선 · 무몰딩, 벽체 래핑</p>
           </div>
           <div class="grid">
           <img class="ph" loading="lazy" src="assets/magok/01.jpg" alt="마곡 힐스테이트 시공 사진">
@@ -224,6 +223,7 @@
           <span class="acc-mark" aria-hidden="true"></span>
         </summary>
         <div class="acc-body">
+          <p class="acc-comment">20년 넘은 구축을 전면 정비해, 오래 살아갈 집의 기본기를 다시 세웠습니다.<span class="acc-draft">초안</span></p>
           <div class="meta">
             <dl>
             <dt>위치</dt><dd>용인 수지</dd>
@@ -259,6 +259,7 @@
           <span class="acc-mark" aria-hidden="true"></span>
         </summary>
         <div class="acc-body">
+          <p class="acc-comment">구축 아파트의 좁고 긴 주방이 고민이었습니다. 대면형 아일랜드를 더해 수납과 주방 동선을 개선했고, 거실 베란다 확장으로 가족들이 머무는 공용공간을 넓게 만들었습니다.</p>
           <div class="meta">
             <dl>
             <dt>위치</dt><dd>서울 강서구</dd>
@@ -268,7 +269,6 @@
             <dt>기간</dt><dd>5주</dd>
             <dt>범위</dt><dd>전창 교체 · 확장 · 시스템 에어컨 포함 전체 수리</dd>
             </dl>
-          <p class="pnote">좁고 긴 구축 주방에 대면형 아일랜드</p>
           </div>
           <div class="grid">
           <img class="ph" loading="lazy" src="assets/yeomchang/01.jpg" alt="염창월드메르디앙 시공 사진">
@@ -284,35 +284,35 @@
     </div>
   </section>
 
-  <!-- 문의 -->
-  <section id="contact" class="contact">
-    <h2>문의하기</h2>
-    <dl>
-      <dt>카카오톡</dt><dd>채널 연결 예정</dd>
-      <dt>이메일</dt><dd>연락처 입력 예정</dd>
-      <dt>인스타그램</dt><dd>@계정 입력 예정</dd>
-    </dl>
-  </section>
 
 </div>
 
 <div class="wrap">
   <footer>
     <span>클못 KEULMOT — 대표 김태연</span>
+    <!-- 상담 폼으로. 카카오톡 채널 URL 확정되면 href 교체 + 라벨 "카카오톡 문의"로 변경 가능 -->
+    <a href="contact.html" class="kakao">문의</a>
     <span>© 2026 KEULMOT</span>
   </footer>
 </div>
 
 <script>
   // 단일 오픈 아코디언: 하나를 열면 나머지는 닫는다 (name 속성 미지원 브라우저 대비).
-  // 열 때 헤더가 화면 위로 벗어나 있으면 부드럽게 스크롤해 맞춘다.
+  // 열면 항상 그 제목을 sticky 헤더 바로 아래로 정렬한다.
+  var HEADER = 52; // sticky 헤더 높이
   var accs = document.querySelectorAll('details.acc');
   accs.forEach(function(d){
     d.addEventListener('toggle', function(){
       if(!d.open) return;
       accs.forEach(function(o){ if(o!==d) o.open = false; });
-      var top = d.getBoundingClientRect().top;
-      if(top < 52) d.scrollIntoView({behavior:'smooth', block:'start'});
+      // 다른 항목이 닫히며 생기는 레이아웃 변화가 끝난 뒤(double rAF) 위치를 잡아야
+      // 제목이 엉뚱한 곳에 남지 않는다.
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          var y = window.pageYOffset + d.getBoundingClientRect().top - HEADER - 8;
+          window.scrollTo({top:y, behavior:'smooth'});
+        });
+      });
     });
   });
 </script>
