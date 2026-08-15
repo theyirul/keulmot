@@ -11,12 +11,17 @@ index-accordion-v1.html.bak
 scratch-csv/
 .DS_Store
 
-# 로컬 미리보기 도구 — 공개 안 함
+# 로컬 미리보기·조절 도구 — 공개 안 함
 preview.py
+tuner.py
 미리보기.command
+__diag.html
 
 # 내부 공유 문서 — 공개 안 함
 소장님-공유-포트폴리오-코멘트.md
 
 # 레퍼런스 원본 — 남의 자산이라 공개 저장소에 올리지 않음
 leibal-home.html
+
+# 배치안 비교용 로컬 파일 — 공개 안 함
+preview-align-*.html

@@ -1,0 +1,182 @@
+/* 클못 사이트 스타일 — 손으로 고치는 파일.
+ *
+ * 이 파일은 build.py 가 건드리지 않는다. 마음대로 고쳐도 안 날아간다.
+ * 저장하면 미리보기가 자동으로 새로고침된다. (미리보기.command 실행 중일 때)
+ *
+ * 사진의 폭·간격만은 여기가 아니라 build.py 의 PROJECTS 에 있다.
+ * 현장마다 값이 달라서 build.py 가 index.html 안에 직접 써넣기 때문.
+ *   lw = 대표사진 폭 / sw = 보조사진 폭 / st = 위쪽 간격 / gap = 현장 사이 간격
+ *
+ * 자주 만지게 될 것들은 바로 아래 :root 에 모아뒀다.
+ */
+
+:root {
+  /* --- 자주 바꾸는 값 --- */
+  --side: 6.7vw;          /* 화면 좌우 바깥 여백 (레퍼런스 AKV 실측 3.2%) */
+  --fs-caption: 16px;     /* 사진 캡션 글자 크기 */
+  --fs-brand: 20px;       /* 좌상단 상호명 */
+  --fs-nav: 20px;         /* 우상단 "문의" */
+  --fs-footer: 14px;      /* 맨 아래 푸터 */
+  --fs-mo: 0.78;           /* 모바일에서 글자를 줄이는 비율 (위 크기들에 곱해진다) */
+  --top: 20px;            /* 상호명·메뉴의 위쪽 위치 */
+
+  --ink: #000;            /* 기본 글자색 */
+  --dim: #aaa;            /* 연한 글자색 (연도, 푸터) */
+  --ph: #ebebeb;          /* 사진이 로딩되기 전 자리 색 */
+
+  /* --- 문의 화면 --- */
+  --form-maxw: 600px;     /* 폼 전체 너비 */
+  --fs-label: 14px;       /* 입력 항목 이름 (이름, 연락처 …) */
+  --fs-input: 14px;       /* 입력칸 글자 */
+  --field-gap: 30px;      /* 항목 사이 간격 */
+  --fs-submit: 15px;      /* '상담 신청하기' */
+
+  /* --- 시공 상세(사진을 눌렀을 때) --- */
+  --lb-maxw: 820px;       /* 사진 최대 너비 */
+  --lb-gap: 14px;         /* 사진 사이 간격 */
+  --lb-top: 74px;         /* 맨 위 여백 */
+
+  /* 위아래 여백. clamp(최소, 화면비례, 최대) */
+  --pad-top: clamp(110px, 13vw, 210px);
+  --pad-bottom: clamp(80px, 9vw, 150px);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #fff;
+  color: var(--ink);
+  font-family: "Helvetica Neue", Arial, Pretendard, -apple-system, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: -.005em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+a:hover { opacity: .5; }
+
+/* ── 상호명·메뉴 ──────────────────────────────
+   fixed 라서 PC·모바일 모두 스크롤을 따라온다.
+   mix-blend-mode:difference 덕분에 사진 위를 지나가도 글자가 보인다. */
+.brand, .nav {
+  position: fixed;
+  top: var(--top);
+  z-index: 60;
+  font-weight: 700;
+  letter-spacing: .04em;
+  mix-blend-mode: difference;
+  color: #fff;
+}
+.brand { left: var(--side); font-size: var(--fs-brand); }
+.nav   { right: var(--side); font-size: var(--fs-nav); font-weight: 400; letter-spacing: .02em; }
+.brand small { font-weight: 400; letter-spacing: .12em; margin-left: 7px; }
+
+/* ── 사진 흐름 ────────────────────────────────
+   arkitektkontoretvest.no 문법. 좌우 두 칼럼에 나란히 두지 않고
+   한 장씩 좌·우 끝으로 번갈아 놓는다. PC·모바일 같은 구조.
+   기준선은 둘뿐 — 대표사진의 왼쪽선, 보조사진의 오른쪽선. */
+main { padding: var(--pad-top) var(--side) var(--pad-bottom); }
+
+.pair { display: block; margin-bottom: var(--gap); cursor: pointer; }
+.pair:last-child { margin-bottom: 0; }
+.lead { position: relative; width: var(--lw); }   /* 왼쪽 기준선 */
+.sub  { margin-left: auto; }                      /* 오른쪽 기준선 */
+
+.pair img { background: var(--ph); transition: opacity .25s; }
+.pair:hover img { opacity: .72; }
+
+/* 캡션 — 대표사진 오른쪽에, 사진 아래선에 baseline 을 맞춘다 */
+.lead figcaption {
+  position: absolute;
+  left: calc(100% + 1.4vw);
+  bottom: 0;
+  white-space: nowrap;
+  font-size: var(--fs-caption);
+  color: var(--ink);
+}
+.lead figcaption span { color: var(--dim); margin-left: 10px; }
+
+/* ── 푸터 ───────────────────────────────────── */
+/* 두 페이지 공통. 상호명·대표명·카피라이트는 빼고 이동 링크 두 개만 둔다. */
+footer {
+  padding: 0 var(--side) 28px;
+  font-size: var(--fs-footer);
+  color: var(--dim);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+footer .links { display: flex; gap: 14px; }
+footer a { color: var(--ink); }
+footer .sep { color: var(--dim); }
+footer small { font-size: inherit; color: var(--dim); }
+
+/* ── 라이트박스 (사진을 누르면 그 현장의 전체 컷) ── */
+.lb {
+  position: fixed; inset: 0; z-index: 100;
+  background: #fff; overflow-y: auto;
+  display: none;
+  padding: var(--lb-top) var(--side) 14vw;   /* 좌우 여백을 다른 화면과 같은 값으로 */
+}
+.lb.on { display: block; }
+/* 열 때 포커스는 이 컨테이너가 받는다(닫기 버튼이 아니라).
+   버튼에 직접 포커스를 주면 브라우저가 키보드 이동으로 보고 네모 테두리를 그려서,
+   무테 미니멀인 화면에 버튼 하나만 박스로 튄다. Tab 을 누르면 그때 버튼으로 넘어간다. */
+.lb:focus { outline: none; }
+.lb-bar {
+  position: fixed; top: var(--top); left: 0; right: 0; z-index: 110;
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 0 var(--side);
+  font-size: var(--fs-caption);
+}
+.lb-bar b { font-weight: 700; }
+.lb-bar b span { color: var(--dim); margin-left: 10px; font-weight: 400; }
+.lb-close {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font: inherit; font-size: var(--fs-caption);
+  color: var(--dim);
+  transition: color .2s;
+}
+.lb-close:hover { color: var(--ink); }
+.lb-close:focus { outline: none; }
+.lb-close:focus-visible { outline: 1px solid var(--ink); outline-offset: 4px; }
+/* 가운데가 아니라 왼쪽 정렬. 최대 너비에 걸려 사진이 좁아져도
+   제목과 사진의 왼쪽선이 계속 맞는다(메인이 대표사진 왼쪽선을 기준 삼는 것과 같은 원리). */
+.lb-imgs {
+  max-width: var(--lb-maxw); margin: 0;
+  display: flex; flex-direction: column;
+  gap: var(--lb-gap);
+}
+.lb-imgs img { width: 100%; background: var(--ph); }
+
+body.locked { overflow: hidden; }
+
+/* ── 모바일 ───────────────────────────────────
+   구조는 데스크톱과 같다. 사진 폭·간격 값만 build.py 가 따로 넣는다.
+   여기서는 캡션 위치만 바꾼다 — 화면이 좁아 사진 오른쪽에 둘 자리가 없으므로
+   사진 바로 아래로 내린다. */
+@media (max-width: 720px) {
+  /* 글자 크기를 여기서 고정값으로 못 박으면 조절기 슬라이더가 모바일에서 안 먹는다.
+     :root 값에 --fs-mo 비율만 곱해서, 슬라이더 하나로 데스크톱·모바일이 함께 움직이게 한다. */
+  .brand { top: 14px; font-size: calc(var(--fs-brand) * var(--fs-mo)); }
+  .nav   { top: 14px; font-size: calc(var(--fs-nav) * var(--fs-mo)); }
+  .brand small { display: none; }
+  footer { font-size: calc(var(--fs-footer) * var(--fs-mo)); }
+
+  .lead figcaption {
+    position: static;
+    margin-top: 3.6vw;
+    font-size: calc(var(--fs-caption) * var(--fs-mo));
+    white-space: normal;
+  }
+  .lead figcaption span { margin-left: 8px; }
+}
+
+@media (max-width: 480px) {
+  .lb { padding-top: calc(var(--lb-top) * .78); }
+  .lb-bar { top: 14px; font-size: calc(var(--fs-caption) * var(--fs-mo)); }
+}
