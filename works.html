@@ -4,124 +4,50 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>시공사례 — 클못 clemot</title>
-<meta name="description" content="1인 인테리어 스튜디오 클못의 주거 공간 시공사례. 상담부터 시공까지 대표가 직접 합니다.">
+<meta name="description" content="1인 인테리어 스튜디오 클못의 주거 공간 시공사례.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="클못 clemot">
+<meta property="og:title" content="시공사례 — 클못 clemot">
+<meta property="og:description" content="1인 인테리어 스튜디오 클못의 주거 공간 시공사례.">
+<meta property="og:image" content="https://theyirul.github.io/keulmot/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="style.css">
-<style>
-/* 토큰·고정 바·라이트박스는 style.css 에 있다. 여기에는 이 페이지만의 목록 레이아웃만 둔다.
- *
- * 메인(index.html)은 사진을 좌우로 흩뿌리지만, 이 목록은 균일한 3열 그리드다.
- * 찾아보는 화면이라 "몇 건이 있고 어떤 집이었나"가 한눈에 들어오는 쪽이 낫다.
- * 메인과 달리 화면을 고정하지 않고 평범하게 스크롤한다. */
-.list {
-  padding: var(--top) var(--side) 120px;
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  column-gap: var(--gap); row-gap: 72px;
-}
-
-.item { cursor: pointer; }
-.item:hover img { opacity: .72; }
-.item:hover .meta { opacity: .5; }
-
-/* 사진은 정사각으로 잘라 넣는다. 원본이 3:4 와 1:1 로 섞여 있어서, 그대로 두면
-   줄마다 높이가 널뛴다. 1:1 이면 정사각 컷은 그대로, 3:4 컷은 위아래만 깎인다. */
-.item img {
-  width: 100%; aspect-ratio: 1; object-fit: cover; object-position: center;
-  background: var(--ph); transition: opacity .25s;
-}
-
-/* 캡션은 사진 바로 아래. 왼쪽 칸에 연도만 두고, 오른쪽 칸에 유형·이름·평형을 세 줄로 쌓는다.
-   연도 열이 왼쪽에 반듯하게 서고 나머지가 한 줄에 맞춰 들어오는 형태. */
-.meta {
-  margin-top: 14px;
-  display: grid; grid-template-columns: 4.2em 1fr auto;
-  align-items: start; gap: 5px 8px;
-  font-size: var(--fs-meta); transition: opacity .25s;
-}
-.meta .yr { grid-column: 1; grid-row: 1; }
-.meta .ty { grid-column: 2; grid-row: 1; }
-.meta .nm { grid-column: 2; grid-row: 2; }
-.meta .sz { grid-column: 2; grid-row: 3; }
-.meta .ar { grid-column: 3; grid-row: 1; }
-
-@media (max-width: 767px) {
-  .list { grid-template-columns: 1fr; row-gap: 56px; }
-  .meta { grid-template-columns: 3.8em 1fr auto; }   /* 크기는 PC와 같은 14px */
-}
-
-/* 태블릿 — 3열은 좁고 1열은 허전한 구간 */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .list { grid-template-columns: repeat(2, 1fr); row-gap: 64px; }
-}
-</style>
 </head>
 <body>
 
 <header class="head">
   <a class="b1" href="index.html">클못</a>
-  <span class="b2">clemot</span>
+  <a class="b2" href="index.html">clemot</a>
   <nav class="nav">
     <a href="works.html" aria-current="page">시공사례</a>
     <a href="contact.html">문의</a>
   </nav>
 </header>
 
-<main class="list">
-  <figure class="item" data-set="geumho">
-    <img src="assets/geumho/09.jpg" alt="금호래미안하이리버 시공 사진">
-    <figcaption class="meta">
-      <span class="yr">2025</span><span class="ty">아파트</span><span class="ar" aria-hidden="true">&rarr;</span>
-      <span class="nm">금호래미안하이리버</span>
-      <span class="sz">33평</span>
-    </figcaption>
-  </figure>
-  <figure class="item" data-set="magok">
-    <img src="assets/magok/06.jpg" alt="마곡 힐스테이트 시공 사진">
-    <figcaption class="meta">
-      <span class="yr">2025</span><span class="ty">아파트</span><span class="ar" aria-hidden="true">&rarr;</span>
-      <span class="nm">마곡 힐스테이트</span>
-      <span class="sz">34평</span>
-    </figcaption>
-  </figure>
-  <figure class="item" data-set="dmc">
-    <img src="assets/dmc/07.jpg" alt="DMC래미안e편한세상 시공 사진">
-    <figcaption class="meta">
-      <span class="yr">2025</span><span class="ty">아파트</span><span class="ar" aria-hidden="true">&rarr;</span>
-      <span class="nm">DMC래미안e편한세상</span>
-      <span class="sz">33평</span>
-    </figcaption>
-  </figure>
-  <figure class="item" data-set="manhyeon">
-    <img src="assets/manhyeon/06.jpg" alt="만현마을5단지 아이파크 시공 사진">
-    <figcaption class="meta">
-      <span class="yr">2025</span><span class="ty">아파트</span><span class="ar" aria-hidden="true">&rarr;</span>
-      <span class="nm">만현마을5단지 아이파크</span>
-      <span class="sz">37평</span>
-    </figcaption>
-  </figure>
-  <figure class="item" data-set="yeomchang">
-    <img src="assets/yeomchang/01.jpg" alt="염창월드메르디앙 시공 사진">
-    <figcaption class="meta">
-      <span class="yr">2025</span><span class="ty">아파트</span><span class="ar" aria-hidden="true">&rarr;</span>
-      <span class="nm">염창월드메르디앙</span>
-      <span class="sz">32평</span>
-    </figcaption>
-  </figure>
-</main>
+<main class="list" id="list"></main>
 
-<div class="lb" id="lb" tabindex="-1" role="dialog" aria-modal="true" aria-label="시공 사례 사진">
-  <div class="lb-bar">
-    <a class="lb-home" href="index.html">클못</a>
-    <b id="lb-title"></b>
-    <button class="lb-close" id="lb-close" aria-label="닫기">닫기</button>
-  </div>
-  <div class="lb-imgs" id="lb-imgs"></div>
-</div>
-
-<script src="photos.js"></script>
+<script src="site.js"></script>
 <script>
-  // 사진 목록과 라이트박스 동작은 photos.js 에 있다 (메인과 공용).
-  LB.bind('.item');
+// 시공사례 목록 — content/사례목록.csv 에 적힌 순서 그대로 늘어놓는다.
+DATA.all().then(function (d) {
+  document.getElementById('list').innerHTML = d.cases.map(function (c) {
+    var n = DATA.esc(c.name);
+    return '<a class="item" href="case.html?id=' + encodeURIComponent(c.name) + '">' +
+      '<img src="' + DATA.url('content/사진/' + c.name + '/' + c.lead) +
+        '" alt="' + n + ' 시공 사진" loading="lazy">' +
+      '<div class="meta">' +
+        '<span class="yr">' + DATA.esc(c.year) + '</span>' +
+        '<span class="ty">' + DATA.esc(c.type) + '</span>' +
+        '<span class="ar" aria-hidden="true">&rarr;</span>' +
+        '<span class="nm">' + n + '</span>' +
+        '<span class="sz">' + DATA.esc(c.size) + '</span>' +
+      '</div></a>';
+  }).join('');
+}).catch(DATA.fail);
 </script>
 
 </body>

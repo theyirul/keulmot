@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- 클못 clemot 파비콘. 브랜드 배경(#F5F2ED) 위에 소문자 c.
+       탭에서 16px 로 줄어들어도 형태가 남도록 굵게 크게 잡았다. -->
+  <rect width="64" height="64" fill="#F5F2ED"/>
+  <text x="32" y="33" fill="#000"
+        font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-size="52" font-weight="700"
+        text-anchor="middle" dominant-baseline="central">c</text>
+</svg>

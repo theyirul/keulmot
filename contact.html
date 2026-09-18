@@ -5,52 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>문의 — 클못 clemot</title>
 <meta name="description" content="클못 인테리어 상담 및 견적 문의. 상담부터 시공까지 대표가 직접 합니다.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="클못 clemot">
+<meta property="og:title" content="문의 — 클못 clemot">
+<meta property="og:description" content="클못 인테리어 상담 및 견적 문의.">
+<meta property="og:image" content="https://theyirul.github.io/keulmot/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="style.css">
-<style>
-/* 토큰·고정 바는 style.css 에 있다. 여기에는 이 페이지만의 연락처 레이아웃만 둔다.
- *
- * 상담 신청 폼은 뺐다 (2026-09-18). 받는 곳도 없었고, 실제로 닿는 창구는 연락처다.
- * 내용이 안내 한 문장 + 연락처 다섯 줄뿐이라 PC에서는 화면 한가운데에 놓는다.
- * 위아래 고정 바 높이만큼만 비워 두면 그 사이의 정중앙에 앉는다.
- * 덩어리는 가운데지만 글은 왼쪽 정렬이다 — 라벨과 값의 세로줄이 맞아야 읽힌다. */
-.wrap {
-  display: grid; grid-template-columns: repeat(12, 1fr); gap: 0 var(--gap);
-  padding: var(--head) var(--side);
-  min-height: 100vh; align-content: center;
-}
-.sec { grid-column: 1/13; width: 100%; max-width: 520px; margin: 0 auto; }
-
-.lead { font-size: var(--fs-caption); line-height: 1.6; margin-bottom: 56px; }
-
-/* 연락처 — 라벨은 작고 흐리게, 값은 캡션 크기로. 값이 주인공이다 */
-.rows { border-top: 1px solid var(--line); }
-.row {
-  display: grid; grid-template-columns: 88px 1fr; gap: 0 var(--gap);
-  align-items: baseline;
-  padding: 16px 0; border-bottom: 1px solid var(--line);
-}
-.row dt { font-size: var(--fs-meta); color: var(--mute); }
-.row dd { font-size: var(--fs-caption); }
-.row dd a:hover { opacity: .5; }
-.row dd a.link { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
-.row dd.todo { color: var(--mute); }   /* 아직 값을 못 받은 줄 */
-
-@media (max-width: 767px) {
-  /* 모바일은 가운데 정렬을 풀고 위에서부터 읽게 둔다 — 화면이 좁아 가운데 둘 여유가 없다 */
-  .wrap { align-content: start; padding: var(--top) var(--side) calc(var(--head) + 80px); }
-  .sec { max-width: none; margin: 0; }
-  .lead { font-size: calc(var(--fs-caption) * var(--fs-mo)); margin-bottom: 40px; }
-  .row { grid-template-columns: 76px 1fr; }
-  .row dd { font-size: calc(var(--fs-caption) * var(--fs-mo)); }
-}
-</style>
 </head>
 <body>
 
 <header class="head">
   <a class="b1" href="index.html">클못</a>
-  <span class="b2">clemot</span>
+  <a class="b2" href="index.html">clemot</a>
   <nav class="nav">
     <a href="works.html">시공사례</a>
     <a href="contact.html" aria-current="page">문의</a>
@@ -58,40 +29,35 @@
 </header>
 
 <div class="wrap">
-  <section class="sec">
-
-  <p class="lead">인테리어 상담 및 견적 문의는<br>아래 연락처로 편하게 연락해 주세요.</p>
-
-  <dl class="rows">
-    <div class="row">
-      <dt>인스타그램</dt>
-      <dd><a class="link" href="https://www.instagram.com/clemot_design" target="_blank" rel="noopener">@clemot_design</a></dd>
-    </div>
-    <div class="row">
-      <dt>카카오톡</dt>
-      <!-- 아이디를 아직 못 받았다. 값이 오면 이 dd 를 <dd>아이디</dd> 로 바꿀 것 -->
-      <dd class="todo">준비 중</dd>
-    </div>
-    <div class="row">
-      <dt>휴대폰</dt>
-      <dd><a href="tel:01092194283">010-9219-4283</a></dd>
-    </div>
-    <div class="row">
-      <dt>사무실</dt>
-      <dd><a href="tel:029494283">02-949-4283</a></dd>
-    </div>
-    <div class="row">
-      <dt>주소</dt>
-      <dd>공릉로12나길 12 103호</dd>
-    </div>
-  </dl>
-
-  </section>
+  <section class="sec"><dl class="rows" id="rows"></dl></section>
 </div>
 
 <footer class="foot">
-  <small>© 2026 clemot All rights reserved.</small>
+  <small>&copy; 2026 clemot All rights reserved.</small>
 </footer>
+
+<script src="site.js"></script>
+<script>
+/* 문의 — content/문의.csv 의 줄을 그대로 늘어놓는다.
+   링크 칸이 비어 있으면 그냥 글자로, 차 있으면 누를 수 있게 된다.
+   링크글자 칸이 있으면 값 옆에 그 글자로 따로 링크가 붙는다 (예: 주소 옆 '지도보기'). */
+DATA.all().then(function (d) {
+  document.getElementById('rows').innerHTML = d.contact.map(function (x) {
+    var v = DATA.esc(x.value), body;
+    if (x.link && x.linkText) {
+      body = v + '<a class="map" href="' + DATA.esc(x.link) + '" target="_blank" rel="noopener">' +
+             DATA.esc(x.linkText) + '</a>';
+    } else if (x.link) {
+      var cls = /^https?:/.test(x.link) ? ' class="link"' : '';
+      var tgt = /^https?:/.test(x.link) ? ' target="_blank" rel="noopener"' : '';
+      body = '<a' + cls + ' href="' + DATA.esc(x.link) + '"' + tgt + '>' + v + '</a>';
+    } else {
+      body = '<span class="todo">' + v + '</span>';
+    }
+    return '<div class="row"><dt>' + DATA.esc(x.label) + '</dt><dd>' + body + '</dd></div>';
+  }).join('');
+}).catch(DATA.fail);
+</script>
 
 </body>
 </html>
