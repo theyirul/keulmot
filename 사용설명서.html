@@ -50,9 +50,24 @@
 </div>
 
 
+<h2>맨 처음 — 압축 풀기</h2>
+
+<ol class="step">
+  <li>받으신 <code>clemot.zip</code> 을 <b>바탕화면</b>이나 <b>문서</b> 폴더로 옮깁니다.</li>
+  <li>파일을 <b>오른쪽 클릭 &gt; 압축 풀기</b> 를 누릅니다.</li>
+  <li><code>clemot</code> 폴더가 생깁니다. 앞으로 이 폴더를 계속 쓰시면 됩니다.</li>
+</ol>
+
+<div class="warn">
+  <b>압축을 푼 뒤 폴더 이름부터 봐 주세요.</b><br>
+  <code>clemot &gt; content &gt; 사진</code> 안에 <b>금호래미안하이리버</b> 처럼 한글 이름이
+  제대로 보이면 정상입니다.<br>
+  <code>ФьеД</code> 같이 깨져 보이면 <b>그대로 쓰시면 안 됩니다</b> — 알려 주세요. 다시 보내 드리겠습니다.
+</div>
+
 <h2>폴더가 이렇게 생겼습니다</h2>
 
-<div class="tree">클못사이트/
+<div class="tree">clemot/
 ├── content/              ← <b>여기만 만지시면 됩니다</b>
 │   ├── 사례목록.csv        시공 사례 목록 (엑셀로 엽니다)
 │   ├── 메인배치.csv        첫 화면에 쓸 사진 12장 고르기
@@ -67,6 +82,12 @@
 └── (나머지 파일)          ← 사이트가 돌아가는 부분. 건드리지 마세요</div>
 
 <p><code>content</code> 바깥의 파일은 손대지 않으셔도 됩니다. 사진과 글은 전부 <code>content</code> 안에 있습니다.</p>
+
+<div class="note">
+  <b>내 컴퓨터에서 <code>index.html</code> 을 눌러도 사이트가 안 보입니다.</b>
+  브라우저가 안전을 이유로 막는 것이라 정상입니다.
+  <b>고치는 건 컴퓨터에서, 보는 건 올린 뒤 인터넷 주소에서</b> 하시면 됩니다.
+</div>
 
 
 <h2>사진 이름 규칙 — 이것 하나만 지키면 됩니다</h2>
@@ -116,7 +137,7 @@
   </li>
   <li>
     <b>저장할 때 반드시 <code>CSV UTF-8</code>로 저장합니다.</b><br>
-    엑셀에서 <i>파일 &gt; 다른 이름으로 저장 &gt; 형식: CSV UTF-8 (쉼표로 분리)</i><br>
+    엑셀에서 <i>파일 &gt; 다른 이름으로 저장</i> &gt; 파일 형식에서 <b>CSV UTF-8(쉼표로 분리)(*.csv)</b> 을 고릅니다.<br><span style="color:var(--mute)">그냥 "CSV(쉼표로 분리)" 를 고르면 한글이 깨집니다. 반드시 <b>UTF-8</b> 이 붙은 것으로요.</span><br>
     "이 형식으로 저장하면 일부 기능이 사라집니다" 같은 안내가 나오면 <b>계속</b>을 누르시면 됩니다.
   </li>
 </ol>
@@ -180,7 +201,7 @@
   <li><a href="https://dash.cloudflare.com" target="_blank">dash.cloudflare.com</a>에 로그인합니다.</li>
   <li>왼쪽 메뉴에서 <b>Workers &amp; Pages</b> &gt; 클못 사이트를 고릅니다.</li>
   <li><b>Create deployment</b> (새로 올리기)를 누릅니다.</li>
-  <li><b>클못사이트 폴더 전체를</b> 화면에 끌어다 놓습니다. <br>
+  <li><b>clemot 폴더 전체를</b> 화면에 끌어다 놓습니다. <br>
       <span style="color:var(--mute)">※ 폴더 안의 파일만이 아니라 폴더째로 올려야 <code>content</code>가 같이 올라갑니다.</span></li>
   <li>1~2분 기다리면 반영됩니다. 주소를 열어 확인해 주세요.</li>
 </ol>
