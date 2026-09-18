@@ -3,124 +3,301 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>클못 CLEMOT</title>
-<meta name="description" content="1인 인테리어 스튜디오 클못의 주거 공간 시공 사례.">
+<title>클못 clemot</title>
+<meta name="description" content="1인 인테리어 스튜디오 클못의 주거 공간 시공 사례. 상담부터 시공까지 대표가 직접 합니다.">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="style.css">
 <style>
-/* 사진 배치값 — build.py 가 생성한다. 여기를 직접 고치면 다시 빌드할 때 덮어써진다.
-   폭·간격을 바꾸려면 build.py 의 PROJECTS 를,
-   그 밖의 스타일(폰트·색·여백·라이트박스)은 style.css 를 고칠 것. */
-  .pair[data-set="geumho"]{--lw:58%;--gap:18vw}
-  .pair[data-set="geumho"] .sub[data-i="0"]{width:48%;margin-top:10vw}
-  .pair[data-set="geumho"] .sub[data-i="1"]{width:42%;margin-top:6vw}
-  .pair[data-set="dmc"]{--lw:54%;--gap:18vw}
-  .pair[data-set="dmc"] .sub[data-i="0"]{width:43%;margin-top:7vw}
-  .pair[data-set="dmc"] .sub[data-i="1"]{width:49%;margin-top:7vw}
-  .pair[data-set="magok"]{--lw:62%;--gap:20vw}
-  .pair[data-set="magok"] .sub[data-i="0"]{width:46%;margin-top:11vw}
-  .pair[data-set="magok"] .sub[data-i="1"]{width:42%;margin-top:6vw}
-  .pair[data-set="manhyeon"]{--lw:59%;--gap:18vw}
-  .pair[data-set="manhyeon"] .sub[data-i="0"]{width:42%;margin-top:10vw}
-  .pair[data-set="manhyeon"] .sub[data-i="1"]{width:48%;margin-top:7vw}
-  .pair[data-set="yeomchang"]{--lw:61%;--gap:18vw}
-  .pair[data-set="yeomchang"] .sub[data-i="0"]{width:49%;margin-top:11vw}
-  .pair[data-set="yeomchang"] .sub[data-i="1"]{width:43%;margin-top:6vw}
-  @media(max-width:720px){
-    .pair[data-set="geumho"]{--lw:62%;--gap:30vw}
-    .pair[data-set="geumho"] .sub[data-i="0"]{width:50%;margin-top:14vw}
-    .pair[data-set="geumho"] .sub[data-i="1"]{width:44%;margin-top:6vw}
-    .pair[data-set="dmc"]{--lw:64%;--gap:30vw}
-    .pair[data-set="dmc"] .sub[data-i="0"]{width:48%;margin-top:14vw}
-    .pair[data-set="dmc"] .sub[data-i="1"]{width:52%;margin-top:7vw}
-    .pair[data-set="magok"]{--lw:73%;--gap:30vw}
-    .pair[data-set="magok"] .sub[data-i="0"]{width:52%;margin-top:15vw}
-    .pair[data-set="magok"] .sub[data-i="1"]{width:47%;margin-top:6vw}
-    .pair[data-set="manhyeon"]{--lw:67%;--gap:30vw}
-    .pair[data-set="manhyeon"] .sub[data-i="0"]{width:49%;margin-top:14vw}
-    .pair[data-set="manhyeon"] .sub[data-i="1"]{width:53%;margin-top:7vw}
-    .pair[data-set="yeomchang"]{--lw:70%;--gap:30vw}
-    .pair[data-set="yeomchang"] .sub[data-i="0"]{width:54%;margin-top:14vw}
-    .pair[data-set="yeomchang"] .sub[data-i="1"]{width:48%;margin-top:6vw}
-  }
+/* 이 파일은 build.py 가 만든다. 여기를 고치면 다시 빌드할 때 덮어써진다.
+   슬롯·사진은 build.py 의 SLOTS, 속도는 SPEED/EASE/RESUME 를 고칠 것.
+   토큰·고정 바·라이트박스처럼 세 페이지가 함께 쓰는 것은 style.css 에 있다. */
+
+/* ── 흐르는 화면 ──────────────────────────────
+   viewport 는 화면에 고정하고, 그 안의 track 을 통째로 위로 민다.
+   같은 12블록을 두 벌 넣어 두고, 한 벌만큼 밀렸을 때 제자리로 되돌린다.
+   눈에는 끊김 없이 계속 이어지는 것처럼 보인다. */
+html, body { height:100%; overflow:hidden; }   /* 스크롤은 아래 JS 가 직접 굴린다 */
+.viewport { position:fixed; inset:0; overflow:hidden; }
+.track { will-change:transform; }
+.set { padding:0 var(--side); }
+.set:first-child { padding-top:var(--top); }
+
+/* 블록 하나 = 칼럼 그리드 한 판. 사진과 캡션이 그 위에 앉는다.
+   --cols 는 보통 12, 반폭 블록만 6이다. */
+.blk {
+  display:grid;
+  grid-template-columns:repeat(var(--cols), 1fr);
+  gap:0 var(--gap);
+}
+
+/* 사진은 슬롯에 정해진 비율(--r)로 채운다.
+   우리 사진은 비율이 네 가지로 섞여 있어서, 그대로 두면 AKV 의 리듬이 무너진다.
+   cover 로 잘라 넣어 어떤 사진이 와도 그 자리의 생김새가 유지되게 한다. */
+.ph { cursor:pointer; }
+.ph img {
+  width:100%; aspect-ratio:var(--r); object-fit:cover; object-position:center;
+  background:var(--ph); transition:opacity .25s;
+}
+.ph:hover img { opacity:.72; }
+
+/* 캡션 — 흐리지 않고 솔리드 검정. 자리는 블록마다 다르다 */
+.cap { font-size:var(--fs-caption); cursor:pointer; }
+.cap span { margin-left:16px; }
+.cap:hover { opacity:.5; }
+
+/* 반폭 두 블록을 한 줄에 */
+.halfwrap { display:flex; gap:0 calc(var(--gap) * 2); }
+.halfwrap .blk { flex:1 1 50%; min-width:0; }
+
+  .blk[data-b="1"]{--cols:12;--r:0.776;margin-bottom:0px}
+  .blk[data-b="1"] .ph{grid-column:1/span 5;grid-row:1}
+  .blk[data-b="1"] .cap{grid-column:6/span 7;grid-row:1;align-self:center}
+  .blk[data-b="2"]{--cols:12;--r:0.75;margin-bottom:240px}
+  .blk[data-b="2"] .ph{grid-column:8/span 3;grid-row:1}
+  .blk[data-b="2"] .cap{grid-column:11/span 2;grid-row:1;align-self:start}
+  .blk[data-b="3"]{--cols:12;--r:1.333;margin-bottom:240px}
+  .blk[data-b="3"] .ph{grid-column:1/span 7;grid-row:1}
+  .blk[data-b="3"] .cap{grid-column:8/span 5;grid-row:1;align-self:start}
+  .blk[data-b="4"]{--cols:12;--r:1.333;margin-bottom:0px}
+  .blk[data-b="4"] .ph{grid-column:8/span 5;grid-row:1}
+  .blk[data-b="4"] .cap{grid-column:8/span 5;grid-row:2;margin-top:8px}
+  .blk[data-b="5"]{--cols:12;--r:0.75;margin-bottom:120px}
+  .blk[data-b="5"] .ph{grid-column:1/span 3;grid-row:1}
+  .blk[data-b="5"] .cap{grid-column:4/span 9;grid-row:1;align-self:start}
+  .blk[data-b="6"]{--cols:12;--r:0.75;margin-bottom:240px}
+  .blk[data-b="6"] .ph{grid-column:6/span 6;grid-row:1}
+  .blk[data-b="6"] .cap{grid-column:6/span 6;grid-row:2;margin-top:8px}
+  .blk[data-b="7"]{--cols:12;--r:1.333;margin-bottom:120px}
+  .blk[data-b="7"] .ph{grid-column:1/span 5;grid-row:1}
+  .blk[data-b="7"] .cap{grid-column:6/span 7;grid-row:1;align-self:center}
+  .blk[data-b="8"]{--cols:12;--r:1.333;margin-bottom:0px}
+  .blk[data-b="8"] .ph{grid-column:8/span 4;grid-row:1}
+  .blk[data-b="8"] .cap{grid-column:8/span 4;grid-row:2;margin-top:8px}
+  .blk[data-b="9"]{--cols:12;--r:0.75;margin-bottom:120px}
+  .blk[data-b="9"] .ph{grid-column:4/span 3;grid-row:1}
+  .blk[data-b="9"] .cap{grid-column:4/span 9;grid-row:2;margin-top:8px}
+  .blk[data-b="10"]{--cols:12;--r:1.333;margin-bottom:240px}
+  .blk[data-b="10"] .ph{grid-column:6/span 7;grid-row:1}
+  .blk[data-b="10"] .cap{grid-column:6/span 7;grid-row:2;margin-top:8px}
+  .blk[data-b="11"]{--cols:6;--r:0.75;margin-bottom:120px}
+  .blk[data-b="11"] .ph{grid-column:1/span 4;grid-row:1}
+  .blk[data-b="11"] .cap{grid-column:1/span 6;grid-row:2;margin-top:8px}
+  .blk[data-b="12"]{--cols:6;--r:0.75;margin-bottom:120px}
+  .blk[data-b="12"] .ph{grid-column:2/span 4;grid-row:1}
+  .blk[data-b="12"] .cap{grid-column:1/span 6;grid-row:2;margin-top:8px}
+
+@media (min-width:1920px) {
+    .blk[data-b="2"]{margin-bottom:420px}
+    .blk[data-b="3"]{margin-bottom:420px}
+    .blk[data-b="5"]{margin-bottom:240px}
+    .blk[data-b="6"]{margin-bottom:420px}
+    .blk[data-b="7"]{margin-bottom:240px}
+    .blk[data-b="9"]{margin-bottom:240px}
+    .blk[data-b="10"]{margin-bottom:420px}
+    .blk[data-b="11"]{margin-bottom:240px}
+    .blk[data-b="12"]{margin-bottom:240px}
+}
+
+/* ── 모바일 ───────────────────────────────────
+   AKV 의 md: 없는 기본값들이다. 캡션은 전부 사진 아래로 내려가고,
+   반폭 두 블록도 위아래로 풀린다. 블록 아래 여백은 120px 로 통일(max-md:pb-[120px]). */
+@media (max-width:767px) {
+  .halfwrap { display:block; }
+  .blk { --cols:12; margin-bottom:120px !important; }
+    .blk[data-b="1"] .ph{grid-column:1/span 7}
+    .blk[data-b="1"] .cap{grid-column:1/span 12;grid-row:2;align-self:start;margin-top:8px}
+    .blk[data-b="2"] .ph{grid-column:8/span 5}
+    .blk[data-b="2"] .cap{grid-column:8/span 5;grid-row:2;align-self:start;margin-top:8px}
+    .blk[data-b="3"] .ph{grid-column:1/span 8}
+    .blk[data-b="3"] .cap{grid-column:1/span 12;grid-row:2;align-self:start;margin-top:8px}
+    .blk[data-b="4"] .ph{grid-column:5/span 8}
+    .blk[data-b="4"] .cap{grid-column:5/span 8;grid-row:2;align-self:start;margin-top:8px}
+    .blk[data-b="5"] .ph{grid-column:1/span 6}
+    .blk[data-b="5"] .cap{grid-column:1/span 12;grid-row:2;align-self:start;margin-top:8px}
+    .blk[data-b="6"] .ph{grid-column:3/span 8}
+    .blk[data-b="6"] .cap{grid-column:3/span 10;grid-row:2;align-self:start;margin-top:8px}
+    .blk[data-b="7"] .ph{grid-column:1/span 6}
+    .blk[data-b="7"] .cap{grid-column:1/span 12;grid-row:2;align-self:start;margin-top:8px}
+    .blk[data-b="8"] .ph{grid-column:8/span 5}
+    .blk[data-b="8"] .cap{grid-column:8/span 5;grid-row:2;align-self:start;margin-top:8px}
+    .blk[data-b="9"] .ph{grid-column:4/span 9}
+    .blk[data-b="9"] .cap{grid-column:4/span 9;grid-row:2;align-self:start;margin-top:8px}
+    .blk[data-b="10"] .ph{grid-column:1/span 8}
+    .blk[data-b="10"] .cap{grid-column:1/span 12;grid-row:2;align-self:start;margin-top:8px}
+    .blk[data-b="11"] .ph{grid-column:1/span 7}
+    .blk[data-b="11"] .cap{grid-column:1/span 12;grid-row:2;align-self:start;margin-top:8px}
+    .blk[data-b="12"] .ph{grid-column:6/span 7}
+    .blk[data-b="12"] .cap{grid-column:6/span 7;grid-row:2;align-self:start;margin-top:8px}
+}
 </style>
 </head>
 <body>
 
-<a class="brand" href="./">클못<small>CLEMOT</small></a>
-<nav class="nav"><a href="contact.html">문의하기</a></nav>
+<header class="head">
+  <a class="b1" href="index.html">클못</a>
+  <span class="b2">clemot</span>
+  <nav class="nav">
+    <a href="works.html">시공사례</a>
+    <a href="contact.html">문의</a>
+  </nav>
+</header>
 
-<main>
-  <section class="pair" data-set="geumho">
-    <figure class="lead">
-      <img src="assets/geumho/09.jpg" alt="금호래미안하이리버 시공 사진" loading="lazy">
-      <figcaption>금호래미안하이리버<span>2025</span></figcaption>
-    </figure>
-    <figure class="sub" data-i="0">
-      <img src="assets/geumho/06.jpg" alt="금호래미안하이리버 시공 사진" loading="lazy">
-    </figure>
-    <figure class="sub" data-i="1">
-      <img src="assets/geumho/01.jpg" alt="금호래미안하이리버 시공 사진" loading="lazy">
-    </figure>
-  </section>
-  <section class="pair" data-set="dmc">
-    <figure class="lead">
-      <img src="assets/dmc/04.jpg" alt="DMC래미안e편한세상 시공 사진" loading="lazy">
-      <figcaption>DMC래미안e편한세상<span>2025</span></figcaption>
-    </figure>
-    <figure class="sub" data-i="0">
-      <img src="assets/dmc/06.jpg" alt="DMC래미안e편한세상 시공 사진" loading="lazy">
-    </figure>
-    <figure class="sub" data-i="1">
-      <img src="assets/dmc/02.jpg" alt="DMC래미안e편한세상 시공 사진" loading="lazy">
-    </figure>
-  </section>
-  <section class="pair" data-set="magok">
-    <figure class="lead">
-      <img src="assets/magok/06.jpg" alt="마곡 힐스테이트 시공 사진" loading="lazy">
-      <figcaption>마곡 힐스테이트<span>2025</span></figcaption>
-    </figure>
-    <figure class="sub" data-i="0">
-      <img src="assets/magok/14.jpg" alt="마곡 힐스테이트 시공 사진" loading="lazy">
-    </figure>
-    <figure class="sub" data-i="1">
-      <img src="assets/magok/03.jpg" alt="마곡 힐스테이트 시공 사진" loading="lazy">
-    </figure>
-  </section>
-  <section class="pair" data-set="manhyeon">
-    <figure class="lead">
-      <img src="assets/manhyeon/06.jpg" alt="만현마을5단지 아이파크 시공 사진" loading="lazy">
-      <figcaption>만현마을5단지 아이파크<span>2025</span></figcaption>
-    </figure>
-    <figure class="sub" data-i="0">
-      <img src="assets/manhyeon/11.jpg" alt="만현마을5단지 아이파크 시공 사진" loading="lazy">
-    </figure>
-    <figure class="sub" data-i="1">
-      <img src="assets/manhyeon/09.jpg" alt="만현마을5단지 아이파크 시공 사진" loading="lazy">
-    </figure>
-  </section>
-  <section class="pair" data-set="yeomchang">
-    <figure class="lead">
-      <img src="assets/yeomchang/05.jpg" alt="염창월드메르디앙 시공 사진" loading="lazy">
-      <figcaption>염창월드메르디앙<span>2025</span></figcaption>
-    </figure>
-    <figure class="sub" data-i="0">
-      <img src="assets/yeomchang/03.jpg" alt="염창월드메르디앙 시공 사진" loading="lazy">
-    </figure>
-    <figure class="sub" data-i="1">
-      <img src="assets/yeomchang/06.jpg" alt="염창월드메르디앙 시공 사진" loading="lazy">
-    </figure>
-  </section>
-</main>
-
-<footer>
-  <div class="links">
-    <a href="./">홈</a>
-    <span class="sep">|</span>
-    <a href="contact.html">문의하기</a>
+<div class="viewport" id="viewport">
+  <div class="track" id="track">
+    <div class="set" id="set">
+      <div class="blk" data-b="1">
+        <figure class="ph" data-set="geumho">
+          <img src="assets/geumho/09.jpg" alt="금호래미안하이리버 시공 사진">
+        </figure>
+        <p class="cap" data-set="geumho">금호래미안하이리버<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="2">
+        <figure class="ph" data-set="magok">
+          <img src="assets/magok/14.jpg" alt="마곡 힐스테이트 시공 사진">
+        </figure>
+        <p class="cap" data-set="magok">마곡 힐스테이트<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="3">
+        <figure class="ph" data-set="dmc">
+          <img src="assets/dmc/02.jpg" alt="DMC래미안e편한세상 시공 사진">
+        </figure>
+        <p class="cap" data-set="dmc">DMC래미안e편한세상<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="4">
+        <figure class="ph" data-set="magok">
+          <img src="assets/magok/06.jpg" alt="마곡 힐스테이트 시공 사진">
+        </figure>
+        <p class="cap" data-set="magok">마곡 힐스테이트<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="5">
+        <figure class="ph" data-set="manhyeon">
+          <img src="assets/manhyeon/12.jpg" alt="만현마을5단지 아이파크 시공 사진">
+        </figure>
+        <p class="cap" data-set="manhyeon">만현마을5단지 아이파크<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="6">
+        <figure class="ph" data-set="geumho">
+          <img src="assets/geumho/06.jpg" alt="금호래미안하이리버 시공 사진">
+        </figure>
+        <p class="cap" data-set="geumho">금호래미안하이리버<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="7">
+        <figure class="ph" data-set="dmc">
+          <img src="assets/dmc/05.jpg" alt="DMC래미안e편한세상 시공 사진">
+        </figure>
+        <p class="cap" data-set="dmc">DMC래미안e편한세상<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="8">
+        <figure class="ph" data-set="manhyeon">
+          <img src="assets/manhyeon/06.jpg" alt="만현마을5단지 아이파크 시공 사진">
+        </figure>
+        <p class="cap" data-set="manhyeon">만현마을5단지 아이파크<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="9">
+        <figure class="ph" data-set="geumho">
+          <img src="assets/geumho/01.jpg" alt="금호래미안하이리버 시공 사진">
+        </figure>
+        <p class="cap" data-set="geumho">금호래미안하이리버<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="10">
+        <figure class="ph" data-set="yeomchang">
+          <img src="assets/yeomchang/04.jpg" alt="염창월드메르디앙 시공 사진">
+        </figure>
+        <p class="cap" data-set="yeomchang">염창월드메르디앙<span>2025</span></p>
+      </div>
+    <div class="halfwrap">
+      <div class="blk half" data-b="11">
+        <figure class="ph" data-set="magok">
+          <img src="assets/magok/09.jpg" alt="마곡 힐스테이트 시공 사진">
+        </figure>
+        <p class="cap" data-set="magok">마곡 힐스테이트<span>2025</span></p>
+      </div>
+      <div class="blk half" data-b="12">
+        <figure class="ph" data-set="dmc">
+          <img src="assets/dmc/04.jpg" alt="DMC래미안e편한세상 시공 사진">
+        </figure>
+        <p class="cap" data-set="dmc">DMC래미안e편한세상<span>2025</span></p>
+      </div>
+    </div>
+    </div>
+    <div class="set" aria-hidden="true">
+      <div class="blk" data-b="1">
+        <figure class="ph" data-set="geumho">
+          <img src="assets/geumho/09.jpg" alt="금호래미안하이리버 시공 사진">
+        </figure>
+        <p class="cap" data-set="geumho">금호래미안하이리버<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="2">
+        <figure class="ph" data-set="magok">
+          <img src="assets/magok/14.jpg" alt="마곡 힐스테이트 시공 사진">
+        </figure>
+        <p class="cap" data-set="magok">마곡 힐스테이트<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="3">
+        <figure class="ph" data-set="dmc">
+          <img src="assets/dmc/02.jpg" alt="DMC래미안e편한세상 시공 사진">
+        </figure>
+        <p class="cap" data-set="dmc">DMC래미안e편한세상<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="4">
+        <figure class="ph" data-set="magok">
+          <img src="assets/magok/06.jpg" alt="마곡 힐스테이트 시공 사진">
+        </figure>
+        <p class="cap" data-set="magok">마곡 힐스테이트<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="5">
+        <figure class="ph" data-set="manhyeon">
+          <img src="assets/manhyeon/12.jpg" alt="만현마을5단지 아이파크 시공 사진">
+        </figure>
+        <p class="cap" data-set="manhyeon">만현마을5단지 아이파크<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="6">
+        <figure class="ph" data-set="geumho">
+          <img src="assets/geumho/06.jpg" alt="금호래미안하이리버 시공 사진">
+        </figure>
+        <p class="cap" data-set="geumho">금호래미안하이리버<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="7">
+        <figure class="ph" data-set="dmc">
+          <img src="assets/dmc/05.jpg" alt="DMC래미안e편한세상 시공 사진">
+        </figure>
+        <p class="cap" data-set="dmc">DMC래미안e편한세상<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="8">
+        <figure class="ph" data-set="manhyeon">
+          <img src="assets/manhyeon/06.jpg" alt="만현마을5단지 아이파크 시공 사진">
+        </figure>
+        <p class="cap" data-set="manhyeon">만현마을5단지 아이파크<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="9">
+        <figure class="ph" data-set="geumho">
+          <img src="assets/geumho/01.jpg" alt="금호래미안하이리버 시공 사진">
+        </figure>
+        <p class="cap" data-set="geumho">금호래미안하이리버<span>2025</span></p>
+      </div>
+      <div class="blk" data-b="10">
+        <figure class="ph" data-set="yeomchang">
+          <img src="assets/yeomchang/04.jpg" alt="염창월드메르디앙 시공 사진">
+        </figure>
+        <p class="cap" data-set="yeomchang">염창월드메르디앙<span>2025</span></p>
+      </div>
+    <div class="halfwrap">
+      <div class="blk half" data-b="11">
+        <figure class="ph" data-set="magok">
+          <img src="assets/magok/09.jpg" alt="마곡 힐스테이트 시공 사진">
+        </figure>
+        <p class="cap" data-set="magok">마곡 힐스테이트<span>2025</span></p>
+      </div>
+      <div class="blk half" data-b="12">
+        <figure class="ph" data-set="dmc">
+          <img src="assets/dmc/04.jpg" alt="DMC래미안e편한세상 시공 사진">
+        </figure>
+        <p class="cap" data-set="dmc">DMC래미안e편한세상<span>2025</span></p>
+      </div>
+    </div>
+    </div>
   </div>
-  <small>© 2026 CLEMOT All rights reserved.</small>
-</footer>
+</div>
 
 <div class="lb" id="lb" tabindex="-1" role="dialog" aria-modal="true" aria-label="시공 사례 사진">
   <div class="lb-bar">
@@ -130,51 +307,89 @@
   <div class="lb-imgs" id="lb-imgs"></div>
 </div>
 
+<script src="photos.js"></script>
 <script>
-  var SETS = {
-    geumho:{name:"금호래미안하이리버",year:"2025",imgs:["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg","11.jpg","12.jpg"]},
-    dmc:{name:"DMC래미안e편한세상",year:"2025",imgs:["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg"]},
-    magok:{name:"마곡 힐스테이트",year:"2025",imgs:["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg","11.jpg","12.jpg","13.jpg","14.jpg"]},
-    manhyeon:{name:"만현마을5단지 아이파크",year:"2025",imgs:["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg","11.jpg","12.jpg","13.jpg"]},
-    yeomchang:{name:"염창월드메르디앙",year:"2025",imgs:["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg"]}
-  };
+(function(){
+  var SPEED  = 26;     // 저절로 흐르는 속도 (px/초)
+  var EASE   = 0.085;      // 따라붙는 부드러움
+  var RESUME = 2500;    // 손댄 뒤 자동 흐름 재개까지 (ms)
 
-  var lb = document.getElementById('lb');
-  var lbImgs = document.getElementById('lb-imgs');
-  var lbTitle = document.getElementById('lb-title');
-  var lastFocus = null;
+  var track = document.getElementById('track');
+  var set   = document.getElementById('set');
 
-  function open(slug){
-    var s = SETS[slug];
-    if(!s) return;
-    lastFocus = document.activeElement;
-    lbTitle.innerHTML = s.name + '<span>' + s.year + '</span>';
-    // 열 때 만든다. 55장을 처음부터 불러오지 않기 위해서.
-    lbImgs.innerHTML = s.imgs.map(function(f){
-      return '<img src="assets/' + slug + '/' + f + '" alt="' + s.name + ' 시공 사진" loading="lazy">';
-    }).join('');
-    lb.classList.add('on');
-    document.body.classList.add('locked');
-    lb.scrollTop = 0;
-    lb.focus();   // 닫기 버튼이 아니라 컨테이너가 받는다(포커스 테두리가 안 그려지도록)
-  }
+  var setH = 0;       // 12블록 한 벌의 높이
+  var target = 0, cur = 0;
+  var touchedAt = 0, hovering = false;
+  var still = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-  function close(){
-    lb.classList.remove('on');
-    document.body.classList.remove('locked');
-    lbImgs.innerHTML = '';
-    if(lastFocus) lastFocus.focus();
-  }
-
-  document.querySelectorAll('.pair').forEach(function(el){
-    el.addEventListener('click', function(){ open(el.dataset.set); });
+  function measure(){ setH = set.offsetHeight; }
+  measure();
+  addEventListener('resize', measure);
+  // 사진이 하나씩 뜰 때마다 높이가 바뀔 수 있어 다시 잰다.
+  // (aspect-ratio 를 슬롯값으로 못박아 둬서 크게 흔들리진 않는다)
+  document.querySelectorAll('.set:first-child img').forEach(function(im){
+    if(!im.complete) im.addEventListener('load', measure);
   });
-  document.getElementById('lb-close').addEventListener('click', close);
-  // 사진이 아닌 여백을 누르면 닫힌다.
-  lb.addEventListener('click', function(e){ if(e.target === lb) close(); });
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape' && lb.classList.contains('on')) close();
+
+  function touched(){ touchedAt = Date.now(); }
+
+  // 휠 — 화면 전체가 fixed 라 기본 스크롤이 없다. 직접 받아서 굴린다.
+  addEventListener('wheel', function(e){
+    if(LB.isOpen()) return;   // 상세가 열려 있으면 그쪽이 스크롤
+    e.preventDefault();
+    target += e.deltaY;
+    touched();
+  }, {passive:false});
+
+  var lastY = null;
+  addEventListener('touchstart', function(e){
+    if(LB.isOpen()) return;
+    lastY = e.touches[0].clientY; touched();
+  }, {passive:true});
+  addEventListener('touchmove', function(e){
+    if(LB.isOpen() || lastY === null) return;
+    var y = e.touches[0].clientY;
+    target += (lastY - y) * 1.4;
+    lastY = y; touched();
+  }, {passive:true});
+  addEventListener('touchend', function(){ lastY = null; });
+
+  addEventListener('keydown', function(e){
+    if(LB.isOpen()) return;
+    var step = innerHeight * .8;
+    if(e.key === 'ArrowDown' || e.key === 'PageDown'){ target += step; touched(); }
+    if(e.key === 'ArrowUp'   || e.key === 'PageUp'  ){ target -= step; touched(); }
   });
+
+  // 사진·캡션에 마우스를 올리면 멈춘다 — 보려는 사람을 흘려보내지 않으려고
+  document.querySelectorAll('.ph, .cap').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ hovering = true; });
+    el.addEventListener('mouseleave', function(){ hovering = false; });
+  });
+
+  var prev = performance.now();
+  function frame(now){
+    var dt = Math.min(now - prev, 50) / 1000;
+    prev = now;
+
+    var idle = Date.now() - touchedAt > RESUME;
+    if(!still && idle && !hovering && !LB.isOpen()) target += SPEED * dt;
+
+    cur += (target - cur) * EASE;
+
+    // 한 벌을 넘어가면 제자리로 되돌린다. 눈에는 이어져 보인다.
+    if(setH > 0){
+      while(cur >= setH){ cur -= setH; target -= setH; }
+      while(cur < 0)     { cur += setH; target += setH; }
+    }
+    track.style.transform = 'translate3d(0,' + (-cur).toFixed(2) + 'px,0)';
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // 라이트박스를 닫자마자 흐르기 시작하지 않도록 시계를 되감는다
+  LB.bind('.ph, .cap', {onClose: touched});
+})();
 </script>
 
 </body>

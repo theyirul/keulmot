@@ -3,152 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>상담 신청 — 클못 CLEMOT</title>
-<meta name="description" content="클못 시공 상담 신청. 상담부터 시공까지 대표가 직접 합니다. 편하게 문의 남겨주세요.">
+<title>문의 — 클못 clemot</title>
+<meta name="description" content="클못 인테리어 상담 및 견적 문의. 상담부터 시공까지 대표가 직접 합니다.">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="style.css">
 <style>
-  /* 메인과 공통인 것(글꼴·색·상호명·푸터·여백 변수)은 style.css 에 있다.
-     여기에는 이 페이지에만 있는 폼 스타일만 둔다.
-     글자 크기를 바꾸려면 style.css 의 :root 나 조절기(/__tune)를 쓸 것. */
-  .wrap{max-width:1240px;margin:0 auto;padding:0 var(--side)}
-  .layout{max-width:var(--form-maxw);padding:clamp(92px,12vw,140px) 0 clamp(52px,7vw,84px)}
+/* 토큰·고정 바는 style.css 에 있다. 여기에는 이 페이지만의 연락처 레이아웃만 둔다.
+ *
+ * 상담 신청 폼은 뺐다 (2026-09-18). 받는 곳도 없었고, 실제로 닿는 창구는 연락처다.
+ * 내용이 안내 한 문장 + 연락처 다섯 줄뿐이라 PC에서는 화면 한가운데에 놓는다.
+ * 위아래 고정 바 높이만큼만 비워 두면 그 사이의 정중앙에 앉는다.
+ * 덩어리는 가운데지만 글은 왼쪽 정렬이다 — 라벨과 값의 세로줄이 맞아야 읽힌다. */
+.wrap {
+  display: grid; grid-template-columns: repeat(12, 1fr); gap: 0 var(--gap);
+  padding: var(--head) var(--side);
+  min-height: 100vh; align-content: center;
+}
+.sec { grid-column: 1/13; width: 100%; max-width: 520px; margin: 0 auto; }
 
-  /* 헤더는 메인처럼 고정한다.
-     다만 메인은 사진 위를 지나가며 반전(mix-blend-mode)으로 읽히는데,
-     이 페이지는 글자 위에 글자가 겹쳐 둘 다 못 읽게 된다.
-     그래서 반전을 끄고 흰 배경을 깔아, 폼이 헤더 아래로 지나가며 가려지게 한다.
-     배경이 어차피 흰색이라 메인과 보이는 결과는 같다. */
-  .page-head{
-    position:fixed;top:0;left:0;right:0;z-index:60;
-    display:flex;justify-content:space-between;align-items:baseline;
-    padding:var(--top) var(--side);
-    background:#fff;
-  }
-  .page-head .brand,.page-head .nav{
-    position:static;mix-blend-mode:normal;color:var(--ink);
-  }
+.lead { font-size: var(--fs-caption); line-height: 1.6; margin-bottom: 56px; }
 
-  /* 업체 소개도, 폼 제목도, 안내 문구도 두지 않는다(2026-08-14). 입력 항목만 남긴다. */
+/* 연락처 — 라벨은 작고 흐리게, 값은 캡션 크기로. 값이 주인공이다 */
+.rows { border-top: 1px solid var(--line); }
+.row {
+  display: grid; grid-template-columns: 88px 1fr; gap: 0 var(--gap);
+  align-items: baseline;
+  padding: 16px 0; border-bottom: 1px solid var(--line);
+}
+.row dt { font-size: var(--fs-meta); color: var(--mute); }
+.row dd { font-size: var(--fs-caption); }
+.row dd a:hover { opacity: .5; }
+.row dd a.link { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.row dd.todo { color: var(--mute); }   /* 아직 값을 못 받은 줄 */
 
-  .field{margin-bottom:var(--field-gap)}
-  .field label{display:block;font-size:var(--fs-label);font-weight:700;margin-bottom:10px}
-  .field label .req{color:#000;margin-left:3px}
-  .field input,.field select,.field textarea{
-    width:100%;border:0;border-bottom:1px solid #cfcfcf;background:transparent;
-    font:inherit;font-size:var(--fs-input);color:#000;padding:8px 2px;outline:none;
-  }
-  .field input::placeholder,.field textarea::placeholder{color:#b3b3b3}
-  .field input:focus,.field select:focus,.field textarea:focus{border-bottom-color:#000}
-  .field select{appearance:none;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='black' fill='none' stroke-width='1.4'/></svg>") no-repeat right 2px center;color:#777}
-  .field select:valid{color:#000}
-  .field textarea{resize:vertical;min-height:80px}
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:var(--field-gap)}
-  @media(max-width:480px){.two{grid-template-columns:1fr}}
-
-  .agree{margin:36px 0 8px;padding-top:28px}
-  .agree label{display:flex;align-items:flex-start;gap:10px;font-size:var(--fs-input);color:#555;cursor:pointer;margin-bottom:12px}
-  .agree label.main{font-size:var(--fs-input);font-weight:700;color:#000}
-  .agree input{margin-top:3px;flex:0 0 auto;accent-color:#000}
-  .agree u{text-underline-offset:2px}
-
-  .submit{display:inline-block;margin-top:36px;background:transparent;color:#000;
-    border:0;padding:0;font:inherit;font-weight:700;font-size:var(--fs-submit);letter-spacing:.01em;
-    text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1px;
-    cursor:pointer;transition:opacity .2s}
-  .submit:hover{opacity:.5}
+@media (max-width: 767px) {
+  /* 모바일은 가운데 정렬을 풀고 위에서부터 읽게 둔다 — 화면이 좁아 가운데 둘 여유가 없다 */
+  .wrap { align-content: start; padding: var(--top) var(--side) calc(var(--head) + 80px); }
+  .sec { max-width: none; margin: 0; }
+  .lead { font-size: calc(var(--fs-caption) * var(--fs-mo)); margin-bottom: 40px; }
+  .row { grid-template-columns: 76px 1fr; }
+  .row dd { font-size: calc(var(--fs-caption) * var(--fs-mo)); }
+}
 </style>
 </head>
 <body>
 
-<header class="page-head">
-  <a class="brand" href="index.html">클못<small>CLEMOT</small></a>
-  <nav class="nav"><a href="index.html">홈</a></nav>
+<header class="head">
+  <a class="b1" href="index.html">클못</a>
+  <span class="b2">clemot</span>
+  <nav class="nav">
+    <a href="works.html">시공사례</a>
+    <a href="contact.html" aria-current="page">문의</a>
+  </nav>
 </header>
 
 <div class="wrap">
-  <div class="layout">
+  <section class="sec">
 
-    <!-- 폼 -->
-    <form onsubmit="return false">
-      <div class="two">
-        <div class="field">
-          <label>이름 <span class="req">*</span></label>
-          <input type="text" placeholder="성함을 입력해주세요" required>
-        </div>
-        <div class="field">
-          <label>연락처 <span class="req">*</span></label>
-          <input type="tel" placeholder="연락 가능한 번호" required>
-        </div>
-      </div>
+  <p class="lead">인테리어 상담 및 견적 문의는<br>아래 연락처로 편하게 연락해 주세요.</p>
 
-      <div class="field">
-        <label>시공 예정 주소 <span class="req">*</span></label>
-        <input type="text" placeholder="시공하려는 아파트 주소를 알려주세요" required>
-      </div>
+  <dl class="rows">
+    <div class="row">
+      <dt>인스타그램</dt>
+      <dd><a class="link" href="https://www.instagram.com/clemot_design" target="_blank" rel="noopener">@clemot_design</a></dd>
+    </div>
+    <div class="row">
+      <dt>카카오톡</dt>
+      <!-- 아이디를 아직 못 받았다. 값이 오면 이 dd 를 <dd>아이디</dd> 로 바꿀 것 -->
+      <dd class="todo">준비 중</dd>
+    </div>
+    <div class="row">
+      <dt>휴대폰</dt>
+      <dd><a href="tel:01092194283">010-9219-4283</a></dd>
+    </div>
+    <div class="row">
+      <dt>사무실</dt>
+      <dd><a href="tel:029494283">02-949-4283</a></dd>
+    </div>
+    <div class="row">
+      <dt>주소</dt>
+      <dd>공릉로12나길 12 103호</dd>
+    </div>
+  </dl>
 
-      <div class="two">
-        <div class="field">
-          <label>평형</label>
-          <input type="text" placeholder="예) 24평">
-        </div>
-        <div class="field">
-          <label>예상 예산</label>
-          <select required>
-            <option value="" disabled selected>선택하세요</option>
-            <option>2천만원 이하</option>
-            <option>2~4천만원</option>
-            <option>4~6천만원</option>
-            <option>6천만원 이상</option>
-            <option>상담 후 결정</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="field">
-        <label>예상 공사 시기</label>
-        <select required>
-          <option value="" disabled selected>선택하세요</option>
-          <option>1개월 이내</option>
-          <option>1~3개월</option>
-          <option>3개월 이후</option>
-          <option>미정</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>문의 내용</label>
-        <textarea placeholder="원하시는 분위기, 참고 이미지, 궁금한 점을 자유롭게 적어주세요"></textarea>
-      </div>
-
-      <div class="agree">
-        <label class="main"><input type="checkbox" id="all"> 약관에 모두 동의합니다</label>
-        <label><input type="checkbox" class="sub-agree"> 상담을 위한 <u>개인정보 수집·이용 동의</u> (필수)</label>
-        <label><input type="checkbox" class="sub-agree"> 안내·소식 수신 동의 (선택)</label>
-      </div>
-
-      <button type="submit" class="submit">상담 신청하기</button>
-    </form>
-
-  </div>
+  </section>
 </div>
 
-<footer>
-  <div class="links">
-    <a href="index.html">홈</a>
-    <span class="sep">|</span>
-    <!-- 카카오톡 채널 URL이 오면 여기를 그 링크로 교체하고 라벨을 "카카오톡 문의하기"로 -->
-    <a href="contact.html">문의하기</a>
-  </div>
-  <small>© 2026 CLEMOT All rights reserved.</small>
+<footer class="foot">
+  <small>© 2026 clemot All rights reserved.</small>
 </footer>
-
-<script>
-  // 약관 전체동의 토글
-  var all=document.getElementById('all');
-  var subs=document.querySelectorAll('.sub-agree');
-  all.addEventListener('change',function(){subs.forEach(function(c){c.checked=all.checked});});
-</script>
 
 </body>
 </html>
