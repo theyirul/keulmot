@@ -46,13 +46,25 @@ var DATA = (function () {
       });
   }
 
-  function loadCSV(name) {
+  /* 엑셀에서 'CSV UTF-8' 이 아닌 그냥 'CSV' 로 저장하면 한글이 깨져서 들어온다.
+     그러면 칸 이름(사례이름·자리·항목)을 못 찾아 화면이 텅 비는데, 원인을 알 길이 없다.
+     그래서 첫 줄에 기대한 칸 이름이 있는지 보고, 없으면 바로 짚어 준다. */
+  function loadCSV(name, mustHave) {
     return fetch(url('content/' + name) + '?v=' + Date.now())
       .then(function (r) {
         if (!r.ok) throw new Error('content/' + name + ' 파일을 찾을 수 없습니다');
         return r.text();
       })
-      .then(parseCSV);
+      .then(function (text) {
+        var rows = parseCSV(text);
+        if (rows.length && mustHave && !(mustHave in rows[0])) {
+          throw new Error(
+            name + ' 의 글자가 깨져 있습니다.\n\n' +
+            '엑셀에서 저장할 때 형식을 "CSV UTF-8 (쉼표로 분리)" 로 골라 주세요. ' +
+            '그냥 "CSV" 로 저장하면 한글이 깨집니다.');
+        }
+        return rows;
+      });
   }
 
   // 사진 한 장이 실제로 있는지 본다
@@ -86,7 +98,9 @@ var DATA = (function () {
   function all() {
     if (cache) return cache;
     cache = Promise.all([
-      loadCSV('사례목록.csv'), loadCSV('메인배치.csv'), loadCSV('문의.csv')
+      loadCSV('사례목록.csv', '사례이름'),
+      loadCSV('메인배치.csv', '자리'),
+      loadCSV('문의.csv', '항목')
     ]).then(function (r) {
       var cases = r[0].map(function (c) {
         return {
@@ -137,7 +151,7 @@ var DATA = (function () {
         '<span style="color:#8a857e">예) clemot.pages.dev/점검.html</span>';
     }
     return '<b>자료를 불러오지 못했습니다.</b><br>' +
-      String(err && err.message || err) +
+      String(err && err.message || err).replace(/\n/g, '<br>') +
       '<br><br>content 폴더가 사이트와 같이 올라갔는지 확인해 주세요.';
   }
 
