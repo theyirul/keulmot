@@ -26,10 +26,27 @@
     <a href="works.html" aria-current="page">시공사례</a>
     <a href="contact.html">문의</a>
   </nav>
+    <button class="menu-btn" id="menu-btn" aria-label="메뉴" aria-expanded="false">
+      <span></span><span></span>
+    </button>
 </header>
 
 <main class="list" id="list"></main>
 
+<script>
+// 모바일 메뉴 — 오른쪽 위 짝대기 두 개를 누르면 펼쳐진다 (2026-09-21 소장님 요청).
+(function () {
+  var b = document.getElementById('menu-btn'), n = document.querySelector('.head .nav');
+  if (!b || !n) return;
+  function set(on) {
+    b.classList.toggle('on', on); n.classList.toggle('on', on);
+    b.setAttribute('aria-expanded', on ? 'true' : 'false');
+  }
+  b.addEventListener('click', function () { set(!n.classList.contains('on')); });
+  n.addEventListener('click', function (e) { if (e.target.tagName === 'A') set(false); });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+})();
+</script>
 <script src="site.js"></script>
 <script>
 // 시공사례 목록 — content/사례목록.csv 에 적힌 순서 그대로 늘어놓는다.

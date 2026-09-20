@@ -26,21 +26,41 @@
     <a href="works.html">시공사례</a>
     <a href="contact.html">문의</a>
   </nav>
+    <button class="menu-btn" id="menu-btn" aria-label="메뉴" aria-expanded="false">
+      <span></span><span></span>
+    </button>
 </header>
 
 <div class="viewport" id="viewport">
   <div class="track" id="track"></div>
 </div>
 
+<script>
+// 모바일 메뉴 — 오른쪽 위 짝대기 두 개를 누르면 펼쳐진다 (2026-09-21 소장님 요청).
+(function () {
+  var b = document.getElementById('menu-btn'), n = document.querySelector('.head .nav');
+  if (!b || !n) return;
+  function set(on) {
+    b.classList.toggle('on', on); n.classList.toggle('on', on);
+    b.setAttribute('aria-expanded', on ? 'true' : 'false');
+  }
+  b.addEventListener('click', function () { set(!n.classList.contains('on')); });
+  n.addEventListener('click', function (e) { if (e.target.tagName === 'A') set(false); });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+})();
+</script>
 <script src="site.js"></script>
 <script>
 /* 메인 — content/메인배치.csv 가 정한 12자리에 사진을 올리고, 저절로 흐르게 한다.
    자리마다의 칼럼·캡션 위치·여백은 style.css 에 고정돼 있다(AKV 실측값).
    여기서는 "어느 사진이 어느 자리에" 만 자료에서 읽는다. */
 (function () {
-  var SPEED = 26;      // 저절로 흐르는 속도 (px/초)
+  /* 자동 흐름 값 — 참고 사이트(AKV)에 맞춘 것이다.
+     RESUME 이 길면 "손 떼도 한참 멈춰 있다" 는 느낌이 든다. 손 떼자마자 이어지게 짧게 둔다.
+     모바일은 화면이 좁아 같은 px/초 여도 느리게 보여서 조금 더 빠르게 간다. */
+  function speed() { return innerWidth < 768 ? 34 : 26; }   // px/초
   var EASE = 0.085;    // 따라붙는 부드러움
-  var RESUME = 2500;   // 손댄 뒤 자동 흐름 재개까지 (ms)
+  var RESUME = 200;    // 손댄 뒤 자동 흐름 재개까지 (ms)
 
   var track = document.getElementById('track');
 
@@ -73,7 +93,7 @@
   }).catch(DATA.fail);
 
   function flow(set) {
-    var setH = 0, target = 0, cur = 0, touchedAt = 0, hovering = false;
+    var setH = 0, target = 0, cur = 0, touchedAt = 0;
     var still = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
     function measure() { setH = set.offsetHeight; }
@@ -105,21 +125,16 @@
       if (e.key === 'ArrowUp' || e.key === 'PageUp') { target -= step; touched(); }
     });
 
-    // 사진에 마우스를 올리면 멈춘다 — 보려는 사람을 흘려보내지 않으려고
-    document.querySelectorAll('.blk').forEach(function (el) {
-      el.addEventListener('mouseenter', function () { hovering = true; });
-      el.addEventListener('mouseleave', function () { hovering = false; });
-    });
-
     var prev = performance.now();
     (function frame(now) {
       var dt = Math.min(now - prev, 50) / 1000; prev = now;
-      if (!still && Date.now() - touchedAt > RESUME && !hovering) target += SPEED * dt;
+      if (!still && Date.now() - touchedAt > RESUME) target += speed() * dt;
       cur += (target - cur) * EASE;
-      if (setH > 0) {
-        while (cur >= setH) { cur -= setH; target -= setH; }
-        while (cur < 0) { cur += setH; target += setH; }
-      }
+      /* 아래로는 끝없이 이어지지만, 위로는 첫 화면에서 멈춘다.
+         참고 사이트도 위로는 더 올라가지 않는다. */
+      if (target < 0) target = 0;
+      if (cur < 0) cur = 0;
+      if (setH > 0) { while (cur >= setH) { cur -= setH; target -= setH; } }
       track.style.transform = 'translate3d(0,' + (-cur).toFixed(2) + 'px,0)';
       requestAnimationFrame(frame);
     })(performance.now());
