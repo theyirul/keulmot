@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>시공사례 — 클못 clemot</title>
-<meta name="description" content="1인 인테리어 스튜디오 클못의 주거 공간 시공사례.">
+<title>소개 — 클못 clemot</title>
+<meta name="description" content="15년 차 주거 공간 디자이너의 1인 인테리어 스튜디오 클못. 상담부터 시공까지 대표가 직접 합니다.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="클못 clemot">
-<meta property="og:title" content="시공사례 — 클못 clemot">
-<meta property="og:description" content="1인 인테리어 스튜디오 클못의 주거 공간 시공사례.">
+<meta property="og:title" content="소개 — 클못 clemot">
+<meta property="og:description" content="15년 차 주거 공간 디자이너의 1인 인테리어 스튜디오 클못.">
 <meta property="og:image" content="https://theyirul.github.io/keulmot/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -23,16 +23,19 @@
   <a class="b1" href="index.html">클못</a>
   <a class="b2" href="index.html">clemot</a>
   <nav class="nav">
-    <a href="about.html">소개</a>
-    <a href="works.html" aria-current="page">시공사례</a>
+    <a href="about.html" aria-current="page">소개</a>
+    <a href="works.html">시공사례</a>
     <a href="contact.html">문의</a>
   </nav>
-    <button class="menu-btn" id="menu-btn" aria-label="메뉴" aria-expanded="false">
-      <span></span><span></span>
-    </button>
+  <button class="menu-btn" id="menu-btn" aria-label="메뉴" aria-expanded="false">
+    <span></span><span></span>
+  </button>
 </header>
 
-<main class="list" id="list"></main>
+<main class="about">
+  <figure class="about-photo"><img src="content/소개.jpg" alt="클못 작업 공간"></figure>
+  <div class="about-text" id="about-text"></div>
+</main>
 
 <script>
 // 모바일 메뉴 — 오른쪽 위 짝대기 두 개를 누르면 펼쳐진다 (2026-09-21 소장님 요청).
@@ -50,21 +53,11 @@
 </script>
 <script src="site.js"></script>
 <script>
-// 시공사례 목록 — content/사례목록.csv 에 적힌 순서 그대로 늘어놓는다.
-DATA.all().then(function (d) {
-  document.getElementById('list').innerHTML = d.cases.map(function (c) {
-    var n = DATA.esc(c.name);
-    return '<a class="item" href="case.html?id=' + encodeURIComponent(c.name) + '">' +
-      '<img src="' + DATA.url('content/사진/' + c.name + '/' + c.lead) +
-        '" alt="' + n + ' 시공 사진" loading="lazy">' +
-      '<div class="meta">' +
-        '<span class="yr">' + DATA.esc(c.year) + '</span>' +
-        '<span class="ty">' + DATA.esc(c.type) + '</span>' +
-        '<span class="ar" aria-hidden="true">&rarr;</span>' +
-        '<span class="nm">' + n + '</span>' +
-        '<span class="sz">' + DATA.esc(c.size) + '</span>' +
-      '</div></a>';
-  }).join('');
+// 소개 글은 content/소개.csv 의 '문단' 칸을 위에서부터 한 단락씩 읽는다.
+// 사진은 content/소개.jpg 를 바꿔 끼우면 된다.
+DATA.text('소개.csv').then(function (rows) {
+  document.getElementById('about-text').innerHTML =
+    rows.map(function (r) { return '<p>' + DATA.esc(r['문단']) + '</p>'; }).join('');
 }).catch(DATA.fail);
 </script>
 

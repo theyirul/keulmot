@@ -165,8 +165,11 @@ var DATA = (function () {
     document.body.appendChild(box);
   }
 
+  // 사례·메인·문의 말고 다른 표 하나만 읽고 싶을 때 (소개 글 등)
+  function text(name) { return loadCSV(name); }
+
   return {
-    all: all, find: find, url: url, photosOf: photosOf, fail: fail, why: why,
+    all: all, find: find, url: url, photosOf: photosOf, fail: fail, why: why, text: text,
     exists: exists,
     esc: function (s) {
       return String(s == null ? '' : s).replace(/[&<>"]/g, function (m) {
