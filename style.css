@@ -347,15 +347,8 @@ html.home, html.home body { height: 100%; overflow: hidden; }
 .ab6 .t { grid-column: 1/6; }
 .ab6 .p { grid-column: 8/12; }
 
-/* 아직 안 채운 자리 — 회색 칸에 자리 이름을 띄운다 */
-.ab .t.empty { color: var(--mute); }
-.ab .p.empty {
-  background: var(--ph); color: var(--mute); font-size: var(--fs-meta);
-  display: flex; align-items: center; justify-content: center; text-align: center;
-  aspect-ratio: 3/4;                      /* AKV 의 세로 사진(1536×2048) */
-}
-.ab3 .p.empty { aspect-ratio: 16/9; }     /* AKV 의 가로 사진(2560×1440) */
-.ab1 .p.empty { aspect-ratio: auto; }
+/* 채우지 않은 자리는 about.html 이 hidden 을 붙여 감춘다. 덩어리의 display:grid 가 hidden 을 덮지 않게 */
+.ab[hidden], .ab [hidden] { display: none; }
 
 /* ── 문의 (contact.html) ────────────────────
    내용이 연락처 몇 줄뿐이라 PC 에서는 화면 한가운데에 놓는다.
@@ -391,7 +384,6 @@ html.home, html.home body { height: 100%; overflow: hidden; }
   .ab1 .t { padding: 112px 0; font-size: 20px; line-height: 24px; }   /* AKV py-28 text-xl leading-6 */
   .ab1 .t p + p { margin-top: 24px; }
   .ab1 .p img { height: auto; }
-  .ab1 .p.empty { aspect-ratio: 3/4; }
   .ab2 .t:nth-child(2) { margin-bottom: 120px; }
   .ab5 .p { margin-bottom: 120px; }
   .ab6 .p { order: 1; margin-bottom: 120px; }

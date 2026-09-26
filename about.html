@@ -70,22 +70,29 @@
 <script>
 /* 소개 — 글은 content/소개.csv 에서 '자리' 가 같은 줄을 모아 한 단락씩,
    사진은 content/소개/사진1.jpg … 사진4.jpg 를 읽는다.
-   아직 안 채운 자리는 회색 칸에 자리 이름을 띄워 둔다 — 어디가 어디인지 보이도록. */
-DATA.about().then(function (by) {
+   채우지 않은 자리는 화면에 나오지 않는다. 한 덩어리가 통째로 비면 그 덩어리의 여백까지 사라진다
+   (2026-09-26 소장님). 어느 자리가 어디인지는 사용설명서 3번의 지도를 본다. */
+var texts = DATA.about().then(function (by) {
   [].forEach.call(document.querySelectorAll('[data-t]'), function (el) {
-    var k = el.getAttribute('data-t'), ps = by[k];
+    var ps = by[el.getAttribute('data-t')];
     if (ps) el.innerHTML = ps.map(function (p) { return '<p>' + DATA.esc(p) + '</p>'; }).join('');
-    else { el.classList.add('empty'); el.innerHTML = '<p>' + k + ' 자리<br>소개.csv 에 자리를 ' + k + ' 로 적은 줄이 여기 들어갑니다</p>'; }
-  });
-}).catch(DATA.fail);
-
-[].forEach.call(document.querySelectorAll('[data-p]'), function (el) {
-  var k = el.getAttribute('data-p'), path = 'content/소개/' + k + '.jpg';
-  DATA.exists(path).then(function (ok) {
-    if (ok) el.innerHTML = '<img src="' + DATA.url(path) + '" alt="클못 ' + k + '">';
-    else { el.classList.add('empty'); el.innerHTML = '<span>' + k + ' 자리<br>content/소개/' + k + '.jpg</span>'; }
+    else el.hidden = true;
   });
 });
+
+var photos = Promise.all([].map.call(document.querySelectorAll('[data-p]'), function (el) {
+  var k = el.getAttribute('data-p'), path = 'content/소개/' + k + '.jpg';
+  return DATA.exists(path).then(function (ok) {
+    if (ok) el.innerHTML = '<img src="' + DATA.url(path) + '" alt="클못 ' + k + '">';
+    else el.hidden = true;
+  });
+}));
+
+Promise.all([texts, photos]).then(function () {
+  [].forEach.call(document.querySelectorAll('.ab'), function (sec) {
+    sec.hidden = !sec.querySelector('[data-t]:not([hidden]), [data-p]:not([hidden])');
+  });
+}).catch(DATA.fail);
 </script>
 
 </body>

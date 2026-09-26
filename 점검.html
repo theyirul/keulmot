@@ -110,7 +110,7 @@ DATA.all().then(function (d) {
   if (never.length) warn.push('메인에 한 번도 안 나오는 사례: ' + never.map(function (c) { return c.name; }).join(', '));
 
 
-  // 6. 소개 — 글8칸·사진4장. 빈 자리는 사이트에 회색 칸으로 보인다
+  // 6. 소개 — 글8칸·사진4장. 빈 자리는 사이트에서 감춰진다
   var T = ['글1','글2','글3','글4','글5','글6','글7','글8'], P = ['사진1','사진2','사진3','사진4'];
   var aboutCheck = Promise.all([
     DATA.about().catch(function (e) { bad.push(String(e.message || e).split('\n')[0]); return {}; }),
@@ -131,7 +131,7 @@ DATA.all().then(function (d) {
               (has[i] ? '있음' : '없음 — content/소개/' + k + '.jpg') + '</td></tr>';
     });
     if (emptyT.length || emptyP.length)
-      warn.push('소개 페이지에 아직 안 채운 자리: ' + emptyT.concat(emptyP).join(', ') + ' (회색 칸으로 보입니다)');
+      warn.push('소개 페이지에 아직 안 채운 자리: ' + emptyT.concat(emptyP).join(', ') + ' (사이트에는 안 보입니다. 채우면 나타납니다)');
     out.push('<h2>소개</h2><table><tr><th>자리</th><th>상태</th></tr>' + rows + '</table>');
   });
 
