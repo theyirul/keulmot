@@ -111,8 +111,12 @@ while ($true) {
     $ns.Flush()
   } catch {
     # Browsers drop connections all the time; keep serving.
-    # Anything unexpected is printed so it can be screenshotted.
-    Write-Host ("  [warn] " + $_.Exception.Message)
+    # Chrome/Edge also open spare connections ahead of time and never send a request on them,
+    # so the Read above times out after 5s. That is harmless noise - do not print it
+    # (it alarmed the owner on 2026-09-26). Anything else is printed so it can be screenshotted.
+    $ex = $_.Exception
+    $io = ($ex -is [System.IO.IOException]) -or ($ex.InnerException -is [System.IO.IOException])
+    if (-not $io) { Write-Host ("  [warn] " + $ex.Message) }
   } finally {
     if ($null -ne $client) { $client.Close() }
   }
