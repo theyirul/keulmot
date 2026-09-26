@@ -21,9 +21,8 @@
 
 <header class="head">
   <a class="b1" href="index.html">클못</a>
-  <a class="b2" href="index.html">clemot</a>
+  <a class="b2" href="about.html" aria-current="page">clemot</a>
   <nav class="nav">
-    <a href="about.html" aria-current="page">소개</a>
     <a href="works.html">시공사례</a>
     <a href="contact.html">문의</a>
   </nav>
@@ -32,33 +31,61 @@
   </button>
 </header>
 
+<!-- 참고 사이트(AKV) 사무실 페이지(/kontoret)의 여섯 덩어리를 그대로 옮겼다 (2026-09-26).
+     자리 이름(글1·사진1 …)은 content/소개.csv 의 '자리' 칸, content/소개/ 의 파일 이름과 같다. -->
 <main class="about">
-  <figure class="about-photo"><img src="content/소개.jpg" alt="클못 작업 공간"></figure>
-  <div class="about-text" id="about-text"></div>
+  <!-- 1. 첫 화면 — 왼쪽 아래 글, 오른쪽 큰 사진 -->
+  <section class="ab ab1">
+    <div class="t lead" data-t="글1"></div>
+    <figure class="p" data-p="사진1"></figure>
+  </section>
+  <!-- 2. 글 세 칸 (AKV 는 연락처·문의 창구·안내) -->
+  <section class="ab ab2">
+    <div class="t" data-t="글2"></div>
+    <div class="t" data-t="글3"></div>
+    <div class="t" data-t="글4"></div>
+  </section>
+  <!-- 3. 가로로 꽉 찬 사진 -->
+  <section class="ab ab3">
+    <figure class="p wide" data-p="사진2"></figure>
+  </section>
+  <!-- 4. 왼쪽 제목, 오른쪽 글 -->
+  <section class="ab ab4">
+    <div class="t" data-t="글5"></div>
+    <div class="t" data-t="글6"></div>
+  </section>
+  <!-- 5. 왼쪽 사진, 오른쪽 글 -->
+  <section class="ab ab5">
+    <figure class="p" data-p="사진3"></figure>
+    <div class="t" data-t="글7"></div>
+  </section>
+  <!-- 6. 왼쪽 글, 오른쪽 사진 (모바일은 사진이 먼저) -->
+  <section class="ab ab6">
+    <div class="t" data-t="글8"></div>
+    <figure class="p" data-p="사진4"></figure>
+  </section>
 </main>
 
-<script>
-// 모바일 메뉴 — 오른쪽 위 짝대기 두 개를 누르면 펼쳐진다 (2026-09-21 소장님 요청).
-(function () {
-  var b = document.getElementById('menu-btn'), n = document.querySelector('.head .nav');
-  if (!b || !n) return;
-  function set(on) {
-    b.classList.toggle('on', on); n.classList.toggle('on', on);
-    b.setAttribute('aria-expanded', on ? 'true' : 'false');
-  }
-  b.addEventListener('click', function () { set(!n.classList.contains('on')); });
-  n.addEventListener('click', function (e) { if (e.target.tagName === 'A') set(false); });
-  addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
-})();
-</script>
 <script src="site.js"></script>
 <script>
-// 소개 글은 content/소개.csv 의 '문단' 칸을 위에서부터 한 단락씩 읽는다.
-// 사진은 content/소개.jpg 를 바꿔 끼우면 된다.
-DATA.text('소개.csv').then(function (rows) {
-  document.getElementById('about-text').innerHTML =
-    rows.map(function (r) { return '<p>' + DATA.esc(r['문단']) + '</p>'; }).join('');
+/* 소개 — 글은 content/소개.csv 에서 '자리' 가 같은 줄을 모아 한 단락씩,
+   사진은 content/소개/사진1.jpg … 사진4.jpg 를 읽는다.
+   아직 안 채운 자리는 회색 칸에 자리 이름을 띄워 둔다 — 어디가 어디인지 보이도록. */
+DATA.about().then(function (by) {
+  [].forEach.call(document.querySelectorAll('[data-t]'), function (el) {
+    var k = el.getAttribute('data-t'), ps = by[k];
+    if (ps) el.innerHTML = ps.map(function (p) { return '<p>' + DATA.esc(p) + '</p>'; }).join('');
+    else { el.classList.add('empty'); el.innerHTML = '<p>' + k + ' 자리<br>소개.csv 에 자리를 ' + k + ' 로 적은 줄이 여기 들어갑니다</p>'; }
+  });
 }).catch(DATA.fail);
+
+[].forEach.call(document.querySelectorAll('[data-p]'), function (el) {
+  var k = el.getAttribute('data-p'), path = 'content/소개/' + k + '.jpg';
+  DATA.exists(path).then(function (ok) {
+    if (ok) el.innerHTML = '<img src="' + DATA.url(path) + '" alt="클못 ' + k + '">';
+    else { el.classList.add('empty'); el.innerHTML = '<span>' + k + ' 자리<br>content/소개/' + k + '.jpg</span>'; }
+  });
+});
 </script>
 
 </body>

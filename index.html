@@ -21,35 +21,20 @@
 
 <header class="head">
   <a class="b1" href="index.html">클못</a>
-  <a class="b2" href="index.html">clemot</a>
+  <a class="b2" href="about.html">clemot</a>
   <nav class="nav">
-    <a href="about.html">소개</a>
     <a href="works.html">시공사례</a>
     <a href="contact.html">문의</a>
   </nav>
-    <button class="menu-btn" id="menu-btn" aria-label="메뉴" aria-expanded="false">
-      <span></span><span></span>
-    </button>
+  <button class="menu-btn" id="menu-btn" aria-label="메뉴" aria-expanded="false">
+    <span></span><span></span>
+  </button>
 </header>
 
 <div class="viewport" id="viewport">
   <div class="track" id="track"></div>
 </div>
 
-<script>
-// 모바일 메뉴 — 오른쪽 위 짝대기 두 개를 누르면 펼쳐진다 (2026-09-21 소장님 요청).
-(function () {
-  var b = document.getElementById('menu-btn'), n = document.querySelector('.head .nav');
-  if (!b || !n) return;
-  function set(on) {
-    b.classList.toggle('on', on); n.classList.toggle('on', on);
-    b.setAttribute('aria-expanded', on ? 'true' : 'false');
-  }
-  b.addEventListener('click', function () { set(!n.classList.contains('on')); });
-  n.addEventListener('click', function (e) { if (e.target.tagName === 'A') set(false); });
-  addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
-})();
-</script>
 <script src="site.js"></script>
 <script>
 /* 메인 — content/메인배치.csv 가 정한 12자리에 사진을 올리고, 저절로 흐르게 한다.
@@ -81,7 +66,7 @@
             '<img src="' + src + '" alt="' + name + ' 시공 사진"' + lazy + '>' +
           '</a>' +
           '<a class="cap" href="' + href + '">' +
-            '<span>' + name + '</span><span>' + DATA.esc(c.year) + '</span></a>' +
+            '<span>' + name + '</span><span>' + DATA.esc(DATA.py(c.size)) + '</span></a>' +
         '</div>';
       if (m.slot >= 11) half += blk; else html += blk;
     });

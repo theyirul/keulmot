@@ -48,17 +48,17 @@ var bad = [], warn = [], out = [];
 DATA.all().then(function (d) {
   // 1. 사례 목록
   out.push('<h2>시공 사례 ' + d.cases.length + '건</h2><table><tr>' +
-    '<th>이름</th><th>연도</th><th>유형</th><th>평형</th><th>사진</th><th>대표사진</th></tr>' +
+    '<th>이름</th><th>유형</th><th>평형</th><th>사진</th><th>대표사진</th></tr>' +
     d.cases.map(function (c) {
       var miss = [];
-      ['year','type','size'].forEach(function (k, i) {
-        if (!c[k]) miss.push(['연도','유형','평형'][i]);
+      ['type','size'].forEach(function (k, i) {
+        if (!c[k]) miss.push(['유형','평형'][i]);
       });
       if (miss.length) bad.push(c.name + ' — ' + miss.join('·') + ' 칸이 비어 있습니다');
       if (!c.photos.length) bad.push(c.name + ' — 사진 폴더가 비었거나 이름이 다릅니다 (content/사진/' + c.name + ')');
       var leadOK = c.photos.indexOf(c.lead) >= 0;
       if (c.photos.length && !leadOK) bad.push(c.name + ' — 대표사진 "' + c.lead + '" 이 폴더에 없습니다');
-      return '<tr><td>' + DATA.esc(c.name) + '</td><td>' + DATA.esc(c.year) + '</td><td>' +
+      return '<tr><td>' + DATA.esc(c.name) + '</td><td>' +
         DATA.esc(c.type) + '</td><td>' + DATA.esc(c.size) + '</td><td>' + c.photos.length + '장</td><td class="' +
         (leadOK ? 'ok' : 'bad') + '">' + DATA.esc(c.lead) + '</td></tr>';
     }).join('') + '</table>');
@@ -110,7 +110,32 @@ DATA.all().then(function (d) {
   if (never.length) warn.push('메인에 한 번도 안 나오는 사례: ' + never.map(function (c) { return c.name; }).join(', '));
 
 
-  orphanCheck.then(function () {
+  // 6. 소개 — 글8칸·사진4장. 빈 자리는 사이트에 회색 칸으로 보인다
+  var T = ['글1','글2','글3','글4','글5','글6','글7','글8'], P = ['사진1','사진2','사진3','사진4'];
+  var aboutCheck = Promise.all([
+    DATA.about().catch(function (e) { bad.push(String(e.message || e).split('\n')[0]); return {}; }),
+    Promise.all(P.map(function (k) { return DATA.exists('content/소개/' + k + '.jpg'); }))
+  ]).then(function (r) {
+    var by = r[0], has = r[1], rows = '', emptyT = [], emptyP = [];
+    Object.keys(by).forEach(function (k) {
+      if (T.indexOf(k) < 0) bad.push('소개.csv — 자리 "' + k + '" 는 없는 자리입니다. 글1 ~ 글8 중 하나로 적어 주세요');
+    });
+    T.forEach(function (k) {
+      if (!by[k]) emptyT.push(k);
+      rows += '<tr><td>' + k + '</td><td class="' + (by[k] ? 'ok' : 'warn') + '">' +
+              (by[k] ? by[k].length + '단락' : '비어 있음') + '</td></tr>';
+    });
+    P.forEach(function (k, i) {
+      if (!has[i]) emptyP.push(k);
+      rows += '<tr><td>' + k + '</td><td class="' + (has[i] ? 'ok' : 'warn') + '">' +
+              (has[i] ? '있음' : '없음 — content/소개/' + k + '.jpg') + '</td></tr>';
+    });
+    if (emptyT.length || emptyP.length)
+      warn.push('소개 페이지에 아직 안 채운 자리: ' + emptyT.concat(emptyP).join(', ') + ' (회색 칸으로 보입니다)');
+    out.push('<h2>소개</h2><table><tr><th>자리</th><th>상태</th></tr>' + rows + '</table>');
+  });
+
+  Promise.all([orphanCheck, aboutCheck]).then(function () {
     var head2 = bad.length
       ? '<div class="big bad">고쳐야 할 곳이 ' + bad.length + '군데 있습니다</div><ul>' +
         bad.map(function (m) { return '<li class="bad">' + DATA.esc(m) + '</li>'; }).join('') + '</ul>'

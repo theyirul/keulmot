@@ -4,6 +4,8 @@
  *   content/사례목록.csv    사례 추가·수정
  *   content/메인배치.csv    메인 12자리에 어느 사진을 쓸지
  *   content/문의.csv        연락처
+ *   content/소개.csv        소개 페이지 글 (자리: 글1 ~ 글8)
+ *   content/소개/           소개 페이지 사진 (사진1.jpg ~ 사진4.jpg)
  *   content/사진/<사례이름>/ 01.jpg 부터 순서대로
  *
  * 사진은 목록을 따로 적지 않는다. 01.jpg 부터 차례로 찾아보다가
@@ -104,7 +106,7 @@ var DATA = (function () {
     ]).then(function (r) {
       var cases = r[0].map(function (c) {
         return {
-          name: c['사례이름'], year: c['연도'], type: c['유형'],
+          name: c['사례이름'], type: c['유형'],
           size: c['평형'], lead: c['대표사진'] || '01.jpg'
         };
       }).filter(function (c) { return c.name; });
@@ -168,13 +170,88 @@ var DATA = (function () {
   // 사례·메인·문의 말고 다른 표 하나만 읽고 싶을 때 (소개 글 등)
   function text(name) { return loadCSV(name); }
 
+  /* 메인 캡션용 평형 표기 — '33평' → '33PY' (2026-09-26 소장님).
+     엑셀에는 평소처럼 '33평' 으로 적으면 된다. 숫자가 없으면 적힌 그대로 둔다. */
+  function py(size) {
+    var m = String(size || '').match(/\d+(\.\d+)?/);
+    return m ? m[0] + 'PY' : String(size || '');
+  }
+
+  /* 소개 페이지 — content/소개.csv 를 자리(글1, 글2 …)별로 묶는다.
+     같은 자리를 여러 줄 적으면 한 줄이 한 단락이 된다. */
+  function about() {
+    return loadCSV('소개.csv', '자리').then(function (rows) {
+      var by = {};
+      rows.forEach(function (r) {
+        var k = (r['자리'] || '').replace(/\s/g, '');
+        if (!k || !r['문단']) return;
+        (by[k] = by[k] || []).push(r['문단']);
+      });
+      return by;
+    });
+  }
+
   return {
     all: all, find: find, url: url, photosOf: photosOf, fail: fail, why: why, text: text,
-    exists: exists,
+    exists: exists, py: py, about: about,
     esc: function (s) {
       return String(s == null ? '' : s).replace(/[&<>"]/g, function (m) {
         return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m];
       });
     }
   };
+})();
+
+/* 모바일 메뉴 — 참고 사이트(AKV) mobileMenu.js 를 그대로 옮겼다 (2026-09-26 소장님).
+   짝대기 두 개를 누르면 → 한 개로 접히고, 클못·clemot 이 오른쪽으로 빠지며 사라진 뒤
+   그 자리에 시공사례·문의가 왼쪽에서 들어온다. 다시 누르면 거꾸로.
+   AKV 값: 0.5초 동안 20px 움직이고, 들어오는 쪽은 1초 늦게 출발한다. */
+(function () {
+  var btn = document.getElementById('menu-btn');
+  var nav = document.querySelector('.head .nav');
+  var logos = [].slice.call(document.querySelectorAll('.head .b1, .head .b2'));
+  if (!btn || !nav) return;
+
+  var DUR = 500, DELAY = 1000, X = 20;
+  var IN = 'cubic-bezier(.55,.085,.68,.53)', OUT = 'cubic-bezier(.25,.46,.45,.94)';
+  var open = false;
+
+  function mobile() { return getComputedStyle(btn).display !== 'none'; }
+
+  function out(el) {
+    el.getAnimations().forEach(function (a) { a.cancel(); });
+    el.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(' + X + 'px)' }],
+      { duration: DUR, easing: IN, fill: 'forwards' })
+      .onfinish = function () { el.style.visibility = 'hidden'; el.style.pointerEvents = 'none'; };
+  }
+  function into(el) {
+    el.getAnimations().forEach(function (a) { a.cancel(); });
+    el.style.visibility = 'visible'; el.style.pointerEvents = 'auto';
+    el.animate([{ opacity: 0, transform: 'translateX(' + -X + 'px)' }, { opacity: 1, transform: 'none' }],
+      { duration: DUR, delay: DELAY, easing: OUT, fill: 'both' });
+  }
+
+  function set(on) {
+    open = on;
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+    if (on) { logos.forEach(out); into(nav); }
+    else { out(nav); logos.forEach(into); }
+  }
+
+  // 처음 상태로 — PC 로 넓어졌거나, 뒤로가기로 돌아왔을 때
+  function reset() {
+    open = false;
+    btn.classList.remove('on');
+    btn.setAttribute('aria-expanded', 'false');
+    [nav].concat(logos).forEach(function (el) {
+      el.getAnimations().forEach(function (a) { a.cancel(); });
+      el.style.visibility = ''; el.style.pointerEvents = '';
+    });
+  }
+
+  btn.addEventListener('click', function () { if (mobile()) set(!open); });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape' && open) set(false); });
+  addEventListener('resize', function () { if (!mobile() && open) reset(); });
+  addEventListener('pageshow', function (e) { if (e.persisted) reset(); });
 })();

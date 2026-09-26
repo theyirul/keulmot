@@ -110,7 +110,7 @@ a { color: inherit; text-decoration: none; }
   width: auto; max-width: 100%;
   background: var(--ph);
 }
-/* 연도 / 유형 / 이름 / 평형을 한 줄씩 쌓는다 */
+/* 유형 / 이름 / 평형을 한 줄씩 쌓는다 (연도는 2026-09-26 에 뺐다) */
 .case-meta { flex: 0 1 auto; font-size: var(--fs-caption); line-height: 1.6; }
 .case-meta p { white-space: nowrap; }
 
@@ -136,38 +136,31 @@ a { color: inherit; text-decoration: none; }
     /* --fs-meta 는 14px 그대로 */
   }
   /* 상호명은 모바일에서도 두 덩어리 다 보인다 (2026-09-21 소장님).
-     대신 메뉴는 오른쪽 위 짝대기 두 개로 접는다 — 참고 사이트와 같은 방식이다. */
+     메뉴는 오른쪽 위 짝대기 두 개로 접는다. 누르면 화면이 바뀌지 않고
+     상호명 자리에 메뉴가 들어선다 — 참고 사이트(AKV)와 같은 방식 (2026-09-26 소장님).
+     움직임은 site.js 맨 아래가 맡는다. 여기는 처음(닫힌) 모습만 정한다. */
   .head .b1 { grid-column: 1/4; }
   .head .b2 { grid-column: 4/9; display: block; }
   .head .nav {
-    /* 그리드 자식이라 inset:0 만으로는 폭이 안 잡힌다. 크기를 직접 못 박는다. */
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 90;
-    justify-self: stretch;
-    background: var(--bg);
-    display: none; flex-direction: column;
-    align-items: flex-start; justify-content: center;
-    gap: 20px; padding: 0 var(--side);
-    font-size: 24px;
+    /* grid-column 을 풀어야 한다 — 그리드 자식은 absolute 여도 자기 칸(10~12)을 틀로 잡는다 */
+    grid-column: auto; justify-self: start; white-space: nowrap;
+    position: absolute; left: var(--side); top: 0; height: var(--head);
+    align-items: center; gap: 40px;       /* AKV gap-10 */
+    font-size: 16px;                      /* AKV text-base — 상호명과 같은 크기로 들어선다 */
+    opacity: 0; visibility: hidden; pointer-events: none;
   }
-  .head .nav.on { display: flex; }
-  .head .nav a { opacity: 1; }
 
-  /* 짝대기 두 개 */
+  /* 짝대기 두 개 — 열리면 높이가 0 으로 접혀 한 개가 된다 (AKV: 28px 폭, 10px 간격) */
   .menu-btn {
-    display: block;
-    grid-column: 11/13; justify-self: end; z-index: 100;
-    width: 26px; height: 18px; padding: 0; border: 0; background: none;
-    cursor: pointer; position: relative;
+    grid-column: 11/13; justify-self: end;
+    display: flex; flex-direction: column; justify-content: space-between;
+    box-sizing: content-box; width: 28px; height: 10px; padding: 16px 0;
+    border: 0; background: none; cursor: pointer;
+    transition: height .5s cubic-bezier(.25,.46,.45,.94);
   }
-  .menu-btn span {
-    position: absolute; left: 0; right: 0; height: 1.5px; background: var(--ink);
-    transition: transform .2s, opacity .2s;
-  }
-  .menu-btn span:nth-child(1) { top: 4px; }
-  .menu-btn span:nth-child(2) { bottom: 4px; }
-  /* 열리면 X 로 바뀐다 */
-  .menu-btn.on span:nth-child(1) { top: 50%; transform: translateY(-50%) rotate(45deg); }
-  .menu-btn.on span:nth-child(2) { bottom: 50%; transform: translateY(50%) rotate(-45deg); }
+  .menu-btn span { display: block; border-top: 1px solid var(--ink); }
+  .menu-btn span + span { margin-top: -1px; }
+  .menu-btn.on { height: 0; }
   .foot .back { grid-column: 1/6; }
   .foot small { grid-column: 6/13; justify-self: end; }
 
@@ -307,38 +300,62 @@ html.home, html.home body { height: 100%; overflow: hidden; }
   width: 100%; aspect-ratio: 1; object-fit: cover; object-position: center;
   background: var(--ph);
 }
-/* 왼쪽 칸에 연도, 오른쪽 칸에 유형·이름·평형을 세 줄로 쌓는다 */
+/* 유형·이름·평형을 세 줄로 쌓고, 오른쪽 끝에 화살표.
+   왼쪽에 있던 연도 칸은 뺐다 — 사이트 어디에도 작업 연도를 두지 않는다 (2026-09-26 소장님) */
 .meta {
   margin-top: 14px;
-  display: grid; grid-template-columns: 4.2em 1fr auto;
+  display: grid; grid-template-columns: 1fr auto;
   align-items: start; gap: 5px 8px;
   font-size: var(--fs-meta); opacity: .5; transition: opacity .15s;
 }
-.meta .yr { grid-column: 1; grid-row: 1; }
-.meta .ty { grid-column: 2; grid-row: 1; }
-.meta .nm { grid-column: 2; grid-row: 2; }
-.meta .sz { grid-column: 2; grid-row: 3; }
-.meta .ar { grid-column: 3; grid-row: 1; }
+.meta .ty { grid-column: 1; grid-row: 1; }
+.meta .nm { grid-column: 1; grid-row: 2; }
+.meta .sz { grid-column: 1; grid-row: 3; }
+.meta .ar { grid-column: 2; grid-row: 1; }
 
 /* ── 소개 (about.html) ──────────────────────
-   참고 사이트(AKV)의 사무실 소개와 같은 구성 — 왼쪽 아래에 글, 오른쪽에 큰 사진.
-   글을 아래로 붙이면 위쪽이 비면서 사진이 주인공으로 선다. */
-.about {
-  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 0 var(--gap);
-  padding: var(--top) var(--side) 120px;
-  align-items: end;                       /* 글 아래선과 사진 아래선을 맞춘다 */
-  min-height: 100vh;
+   참고 사이트(AKV) 사무실 페이지(/kontoret) 원문 HTML 에서 옮긴 값이다 (2026-09-26).
+   덩어리마다 12칸 그리드, 칸 사이 16px, 아래 여백 240px(모바일 120px).
+     1  글 1~5칸 아래 붙임  | 사진 8~12칸, 첫 화면 높이를 꽉 채움
+     2  글 1~3칸 | 글 4~7칸 | 글 8~11칸
+     3  사진 1~12칸 (가로로 꽉)
+     4  글 1~5칸 | 글 8~12칸
+     5  사진 1~4칸 | 글 8~12칸
+     6  글 1~5칸 | 사진 8~11칸   (모바일은 사진이 먼저) */
+.about { padding-top: var(--top); }
+.ab {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap);
+  padding: 0 var(--side) 240px;
 }
-.about-text { grid-column: 1/6; grid-row: 1; font-size: var(--fs-caption); line-height: 1.7; }
-.about-text p { margin-bottom: 1.2em; }
-.about-text p:last-child { margin-bottom: 0; }
-.about-photo { grid-column: 8/13; grid-row: 1; }
-.about-photo img {
-  width: 100%; height: auto;
-  max-height: calc(100vh - var(--top) - 120px);
-  object-fit: cover; object-position: center;
-  background: var(--ph);
+.ab .t { max-width: 720px; }
+.ab .t p + p { margin-top: 1.33em; }      /* AKV 는 단락 사이에 빈 줄 하나 */
+.ab .p img { width: 100%; height: auto; background: var(--ph); }
+
+/* 1 — 첫 화면. 위 여백(120)과 아래 숨통(72)을 빼고 화면 높이를 채운다 (AKV calc(100vh-72px-48px)) */
+.ab1 { height: calc(100vh - var(--top)); padding-bottom: 16px; margin-bottom: 240px; }
+.ab1 .t { grid-column: 1/6; align-self: end; font-size: 20px; }
+.ab1 .p { grid-column: 8/13; overflow: hidden; }
+.ab1 .p img { height: 100%; object-fit: cover; }
+.ab2 .t:nth-child(1) { grid-column: 1/4; }
+.ab2 .t:nth-child(2) { grid-column: 4/8; }
+.ab2 .t:nth-child(3) { grid-column: 8/12; }
+.ab3 .p { grid-column: 1/13; }
+.ab4 .t:nth-child(1) { grid-column: 1/6; }
+.ab4 .t:nth-child(2) { grid-column: 8/13; }
+.ab5 .p { grid-column: 1/5; }
+.ab5 .t { grid-column: 8/13; }
+.ab6 .t { grid-column: 1/6; }
+.ab6 .p { grid-column: 8/12; }
+
+/* 아직 안 채운 자리 — 회색 칸에 자리 이름을 띄운다 */
+.ab .t.empty { color: var(--mute); }
+.ab .p.empty {
+  background: var(--ph); color: var(--mute); font-size: var(--fs-meta);
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  aspect-ratio: 3/4;                      /* AKV 의 세로 사진(1536×2048) */
 }
+.ab3 .p.empty { aspect-ratio: 16/9; }     /* AKV 의 가로 사진(2560×1440) */
+.ab1 .p.empty { aspect-ratio: auto; }
 
 /* ── 문의 (contact.html) ────────────────────
    내용이 연락처 몇 줄뿐이라 PC 에서는 화면 한가운데에 놓는다.
@@ -366,11 +383,19 @@ html.home, html.home body { height: 100%; overflow: hidden; }
 
 @media (max-width: 767px) {
   .list { grid-template-columns: 1fr; row-gap: 56px; }
-  .meta { grid-template-columns: 3.8em 1fr auto; }
-  /* 소개 — 좁은 화면에선 사진이 먼저, 글이 그 아래 */
-  .about { display: block; padding-bottom: 80px; }
-  .about-photo { margin-bottom: 40px; }
-  .about-photo img { max-height: calc(100vh - var(--top) - 160px); }
+  /* 소개 — 전부 한 줄씩 쌓인다. 순서·여백은 AKV 의 max-md: 값 */
+  .about { padding-top: 0; }
+  .ab { padding-bottom: 120px; }
+  .ab > * { grid-column: 1/13 !important; }
+  .ab1 { height: auto; margin-bottom: 0; }
+  .ab1 .t { padding: 112px 0; font-size: 20px; line-height: 24px; }   /* AKV py-28 text-xl leading-6 */
+  .ab1 .t p + p { margin-top: 24px; }
+  .ab1 .p img { height: auto; }
+  .ab1 .p.empty { aspect-ratio: 3/4; }
+  .ab2 .t:nth-child(2) { margin-bottom: 120px; }
+  .ab5 .p { margin-bottom: 120px; }
+  .ab6 .p { order: 1; margin-bottom: 120px; }
+  .ab6 .t { order: 2; }
   .wrap { align-content: start; padding: var(--top) var(--side) calc(var(--head) + 80px); }
   .sec { max-width: none; margin: 0; }
   .row { grid-template-columns: 76px 1fr; }
